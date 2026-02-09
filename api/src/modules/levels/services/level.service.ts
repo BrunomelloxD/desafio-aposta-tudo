@@ -1,0 +1,44 @@
+import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
+import { LevelRepository } from "../repositories/level.repository";
+import { PaginatedResponseDto } from "src/common/dtos/paginated-response.dto";
+import { PaginationDto } from "src/common/dtos/pagination.dto";
+import { CreateLevelDto } from "../dtos/create-level.dto";
+import { LevelResponseDto } from "../dtos/response/level-response.dto";
+import { ProfessionalRepository } from "src/modules/professionals/repositories/professional.repository";
+
+@Injectable()
+export class LevelService {
+    constructor(private readonly levelRepository: LevelRepository, private readonly professionalRepository: ProfessionalRepository) { }
+
+    async update(id: string, data: CreateLevelDto): Promise<void> {
+        const level = await this.levelRepository.findOne(id);
+        if (!level) {
+            throw new NotFoundException(`Nível com ID ${id} não encontrado.`);
+        }
+
+        await this.levelRepository.update(id, data);
+    }
+
+    async create(data: CreateLevelDto): Promise<LevelResponseDto> {
+        return await this.levelRepository.create(data);
+    }
+
+    async findAll(queryParams: PaginationDto): Promise<PaginatedResponseDto<LevelResponseDto>> {
+        return await this.levelRepository.findAll(queryParams);
+    }
+
+    async delete(id: string): Promise<void> {
+        const level = await this.levelRepository.findOne(id);
+        if (!level) {
+            throw new NotFoundException(`Nível com ID ${id} não encontrado.`);
+        }
+
+        const hasProfessionals = await this.professionalRepository.existsProfessionalForSeniorityLevel(id);
+
+        if (hasProfessionals) {
+            throw new ConflictException(`Não é possível excluir o nível com ID ${id} porque existem profissionais associados a ele.`);
+        }
+
+        await this.levelRepository.delete(id);
+    }
+}

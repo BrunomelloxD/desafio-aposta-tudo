@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  nuxt-frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nuxt-frontend
+    ports:
+      - "8080:8080"
+    environment:
+      - NODE_ENV=production
+      - NUXT_PUBLIC_API_BASE=${NUXT_PUBLIC_API_BASE:-http://localhost:3000}
+    restart: unless-stopped
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
