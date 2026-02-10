@@ -198,7 +198,6 @@ npm run test:coverage
 cd api
 npm run test          # Testes unitários
 npm run test:cov      # Testes com cobertura
-npm run test:e2e      # Testes end-to-end
 ```
 
 #### Frontend
