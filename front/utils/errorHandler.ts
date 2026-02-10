@@ -1,3 +1,28 @@
+/**
+ * Verifica se o erro é de conflito (409)
+ * @param error - Erro capturado
+ * @returns true se for erro de conflito
+ */
+export const isConflictError = (error: unknown): boolean => {
+  const err = error as ApiError
+  return (
+    err?.statusCode === HTTP_STATUS.CONFLICT ||
+    err?.response?.status === HTTP_STATUS.CONFLICT
+  )
+}
+
+/**
+ * Verifica se o erro é de não encontrado (404)
+ * @param error - Erro capturado
+ * @returns true se for erro de não encontrado
+ */
+export const isNotFoundError = (error: unknown): boolean => {
+  const err = error as ApiError
+  return (
+    err?.statusCode === HTTP_STATUS.NOT_FOUND ||
+    err?.response?.status === HTTP_STATUS.NOT_FOUND
+  )
+}
 import { HTTP_STATUS, ERROR_MESSAGES } from './constants'
 
 /**
