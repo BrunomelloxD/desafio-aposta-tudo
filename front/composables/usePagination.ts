@@ -1,30 +1,52 @@
+import { PAGINATION } from '~/utils/constants'
+
 /**
- * Hook para gerenciar paginação
+ * Composable para gerenciar paginação
+ * @param initialLimit - Limite inicial de itens por página (padrão: 10)
  */
-export const usePagination = (initialLimit: number = 10) => {
-  const currentPage = ref(1)
+export const usePagination = (initialLimit: number = PAGINATION.DEFAULT_LIMIT) => {
+  const currentPage = ref(PAGINATION.DEFAULT_PAGE)
   const limit = ref(initialLimit)
 
+  /**
+   * Reseta a página atual para a primeira
+   */
   const resetPage = () => {
-    currentPage.value = 1
+    currentPage.value = PAGINATION.DEFAULT_PAGE
   }
 
+  /**
+   * Avança para a próxima página se disponível
+   * @param lastPage - Número da última página
+   */
   const nextPage = (lastPage: number) => {
     if (currentPage.value < lastPage) {
       currentPage.value++
     }
   }
 
+  /**
+   * Volta para a página anterior se disponível
+   */
   const prevPage = () => {
     if (currentPage.value > 1) {
       currentPage.value--
     }
   }
 
+  /**
+   * Navega para uma página específica
+   * @param page - Número da página desejada
+   */
   const goToPage = (page: number) => {
     currentPage.value = page
   }
 
+  /**
+   * Calcula as páginas visíveis para o componente de paginação
+   * @param lastPage - Número da última página
+   * @returns Array de números de página a serem exibidos
+   */
   const getVisiblePages = (lastPage: number): number[] => {
     const current = currentPage.value
     const pages: number[] = []

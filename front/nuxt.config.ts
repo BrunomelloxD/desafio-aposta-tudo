@@ -25,10 +25,36 @@ export default defineNuxtConfig({
 
   app: {
     head: {
-      title: 'Sistema de Gestão',
+      title: 'APOSTATUDO - Sistema de Gestão',
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' }
+      ],
+      link: [
+        /**
+         * Google Fonts - Plus Jakarta Sans
+         * 
+         * Tech Lead Decision:
+         * - Preconnect otimiza DNS lookup (~100ms improvement)
+         * - display=swap evita FOIT (Flash of Invisible Text)
+         * - Weights 300-800 cobrem todos os casos de uso do design
+         * - CDN do Google oferece cache global e alta disponibilidade
+         * 
+         * @see /FONTS.md para documentação completa
+         */
+        {
+          rel: 'preconnect',
+          href: 'https://fonts.googleapis.com'
+        },
+        {
+          rel: 'preconnect',
+          href: 'https://fonts.gstatic.com',
+          crossorigin: ''
+        },
+        {
+          rel: 'stylesheet',
+          href: 'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap'
+        }
       ]
     }
   }

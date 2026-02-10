@@ -13,7 +13,7 @@
           <Transition name="modal-backdrop">
             <div
               v-if="modelValue"
-              class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+              class="fixed inset-0 bg-black bg-opacity-75 transition-opacity"
               aria-hidden="true"
               @click="closeOnBackdrop && close()"
             />
@@ -24,7 +24,7 @@
           <Transition name="modal-content">
             <div
               v-if="modelValue"
-              class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+              class="inline-block align-bottom bg-dark-light rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full border border-dark-lighter"
               :class="sizeClasses"
             >
               <slot />

@@ -1,5 +1,6 @@
 import type { Nivel, PaginatedResponse } from '~/types'
 import { getErrorMessage } from '~/utils/errorHandler'
+import { PAGINATION } from '~/utils/constants'
 
 /**
  * Composable para gerenciar operações de níveis
@@ -8,9 +9,16 @@ export const useNiveis = () => {
   const config = useRuntimeConfig()
   const apiBase = config.public.apiBase
 
+  /**
+   * Busca níveis com paginação e filtro de pesquisa
+   * @param page - Número da página
+   * @param limit - Quantidade de itens por página
+   * @param search - Termo de busca (opcional)
+   * @returns Lista paginada de níveis
+   */
   const fetchNiveis = async (
-    page: number = 1,
-    limit: number = 10,
+    page: number = PAGINATION.DEFAULT_PAGE,
+    limit: number = PAGINATION.DEFAULT_LIMIT,
     search: string = ''
   ): Promise<PaginatedResponse<Nivel>> => {
     try {
@@ -26,6 +34,11 @@ export const useNiveis = () => {
     }
   }
 
+  /**
+   * Cria um novo nível
+   * @param nivel - Nome do nível
+   * @returns Nível criado
+   */
   const createNivel = async (nivel: string): Promise<Nivel> => {
     try {
       return await $fetch<Nivel>(`${apiBase}/api/niveis`, {
@@ -38,6 +51,12 @@ export const useNiveis = () => {
     }
   }
 
+  /**
+   * Atualiza um nível existente
+   * @param id - ID do nível
+   * @param nivel - Novo nome do nível
+   * @returns Nível atualizado
+   */
   const updateNivel = async (id: string, nivel: string): Promise<Nivel> => {
     try {
       return await $fetch<Nivel>(`${apiBase}/api/niveis/${id}`, {
@@ -50,6 +69,10 @@ export const useNiveis = () => {
     }
   }
 
+  /**
+   * Exclui um nível
+   * @param id - ID do nível a ser excluído
+   */
   const deleteNivel = async (id: string): Promise<void> => {
     try {
       await $fetch(`${apiBase}/api/niveis/${id}`, {

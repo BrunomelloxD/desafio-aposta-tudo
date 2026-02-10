@@ -10,6 +10,14 @@ import { LevelResponseDto } from "../dtos/response/level-response.dto";
 export class LevelRepository implements ILevelRepository {
     constructor(private readonly prismaService: PrismaService) { }
 
+    async existsByName(name: string): Promise<boolean> {
+        const count = await this.prismaService.niveis.count({
+            where: { nivel: name },
+        });
+        
+        return count > 0;
+    }
+
     async update(id: string, data: CreateLevelDto): Promise<LevelResponseDto> {
         return await this.prismaService.niveis.update({
             where: { id },

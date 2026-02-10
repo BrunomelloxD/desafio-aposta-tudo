@@ -1,6 +1,6 @@
 <template>
   <UiModal v-model="isOpen" size="sm" :close-on-backdrop="false">
-    <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+    <div class="bg-dark-light px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
       <div class="sm:flex sm:items-start">
         <div
           class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full sm:mx-0 sm:h-10 sm:w-10"
@@ -9,23 +9,23 @@
           <component :is="icon" class="h-6 w-6" :class="variantClasses.text" aria-hidden="true" />
         </div>
         <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-          <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+          <h3 class="text-lg leading-6 font-medium text-white" id="modal-title">
             {{ title }}
           </h3>
           <div class="mt-2">
-            <p class="text-sm text-gray-500">
+            <p class="text-sm text-gray-400">
               {{ message }}
             </p>
           </div>
         </div>
       </div>
     </div>
-    <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+    <div class="bg-dark-lighter px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
       <button
         type="button"
         @click="confirm"
         :disabled="loading"
-        class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50"
+        class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50 transition-all duration-200"
         :class="[variantClasses.button, loading && 'cursor-not-allowed']"
       >
         {{ loading ? loadingText : confirmText }}
@@ -34,7 +34,7 @@
         type="button"
         @click="cancel"
         :disabled="loading"
-        class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50"
+        class="mt-3 w-full inline-flex justify-center rounded-md border border-dark-lighter shadow-sm px-4 py-2 bg-dark text-base font-medium text-gray-300 hover:bg-dark-lighter focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50 transition-all duration-200"
       >
         {{ cancelText }}
       </button>
@@ -88,23 +88,23 @@ const icon = computed(() => {
 const variantClasses = computed(() => {
   const variants = {
     danger: {
-      bg: 'bg-red-100',
-      text: 'text-red-600',
-      button: 'bg-red-600 hover:bg-red-700 focus:ring-red-500'
+      bg: 'bg-red-900/30',
+      text: 'text-red-400',
+      button: 'bg-accent hover:bg-accent-dark focus:ring-accent'
     },
     warning: {
-      bg: 'bg-yellow-100',
-      text: 'text-yellow-600',
+      bg: 'bg-yellow-900/30',
+      text: 'text-yellow-400',
       button: 'bg-yellow-600 hover:bg-yellow-700 focus:ring-yellow-500'
     },
     info: {
-      bg: 'bg-blue-100',
-      text: 'text-blue-600',
-      button: 'bg-blue-600 hover:bg-blue-700 focus:ring-blue-500'
+      bg: 'bg-blue-900/30',
+      text: 'text-primary-light',
+      button: 'bg-primary hover:bg-primary-dark focus:ring-primary'
     },
     success: {
-      bg: 'bg-green-100',
-      text: 'text-green-600',
+      bg: 'bg-green-900/30',
+      text: 'text-green-400',
       button: 'bg-green-600 hover:bg-green-700 focus:ring-green-500'
     }
   }

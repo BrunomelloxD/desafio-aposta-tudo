@@ -16,10 +16,22 @@ export class LevelService {
             throw new NotFoundException(`Nível com ID ${id} não encontrado.`);
         }
 
+        const existsByName = await this.levelRepository.existsByName(data.nome);
+
+        if (existsByName) {
+            throw new ConflictException(`Já existe um nível com o nome ${data.nome}.`);
+        }
+
         await this.levelRepository.update(id, data);
     }
 
     async create(data: CreateLevelDto): Promise<LevelResponseDto> {
+        const existsByName = await this.levelRepository.existsByName(data.nome);
+
+        if (existsByName) {
+            throw new ConflictException(`Já existe um nível com o nome ${data.nome}.`);
+        }
+
         return await this.levelRepository.create(data);
     }
 
@@ -36,7 +48,7 @@ export class LevelService {
         const hasProfessionals = await this.professionalRepository.existsProfessionalForSeniorityLevel(id);
 
         if (hasProfessionals) {
-            throw new ConflictException(`Não é possível excluir o nível com ID ${id} porque existem profissionais associados a ele.`);
+            throw new ConflictException(`Não é possível excluir o nível "${level.nivel}" existem profissionais associados a ele.`);
         }
 
         await this.levelRepository.delete(id);

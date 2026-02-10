@@ -1,9 +1,17 @@
 import { HTTP_STATUS, ERROR_MESSAGES } from './constants'
 
+/**
+ * Interface para erros da API (FetchError do Nuxt)
+ */
 export interface ApiError {
-  message: string
+  message?: string
   error?: string
   statusCode?: number
+  data?: {
+    message?: string
+    error?: string
+    statusCode?: number
+  }
   response?: {
     status: number
     data?: {
@@ -14,36 +22,29 @@ export interface ApiError {
 
 /**
  * Extrai mensagem de erro amigável de diferentes formatos de erro
+ * Prioriza mensagens da API sobre mensagens genéricas
+ * @param error - Erro capturado (pode ser de vários tipos)
+ * @returns Mensagem de erro formatada para o usuário
  */
 export const getErrorMessage = (error: unknown): string => {
   if (!error) return ERROR_MESSAGES.GENERIC_ERROR
 
   const err = error as ApiError
 
-  // Erro de conflito ao deletar nível
+  // Prioridade 1: Mensagem da API no formato FetchError (err.data.message)
+  if (err.data?.message) return err.data.message
+
+  // Prioridade 2: Mensagem da API no formato response.data.message
+  if (err.response?.data?.message) return err.response.data.message
+
+  // Prioridade 3: Mensagem direta do erro
+  if (err.message) return err.message
+
+  // Prioridade 4: Erro de conflito (409) - mensagem genérica apenas se não houver mensagem específica
   if (err.statusCode === HTTP_STATUS.CONFLICT || err.response?.status === HTTP_STATUS.CONFLICT) {
     return ERROR_MESSAGES.DELETE_NIVEL_CONFLICT
   }
 
-  // Tentar extrair mensagem do erro
-  if (err.message) return err.message
-  if (err.response?.data?.message) return err.response.data.message
-
+  // Prioridade 5: Mensagem genérica como fallback
   return ERROR_MESSAGES.GENERIC_ERROR
-}
-
-/**
- * Verifica se é erro de conflito (409)
- */
-export const isConflictError = (error: unknown): boolean => {
-  const err = error as ApiError
-  return err.statusCode === HTTP_STATUS.CONFLICT || err.response?.status === HTTP_STATUS.CONFLICT
-}
-
-/**
- * Verifica se é erro de não encontrado (404)
- */
-export const isNotFoundError = (error: unknown): boolean => {
-  const err = error as ApiError
-  return err.statusCode === HTTP_STATUS.NOT_FOUND || err.response?.status === HTTP_STATUS.NOT_FOUND
 }

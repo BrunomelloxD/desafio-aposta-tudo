@@ -10,7 +10,9 @@
     "postinstall": "nuxt prepare",
     "test": "vitest",
     "test:ui": "vitest --ui",
-    "test:coverage": "vitest --coverage"
+    "test:coverage": "vitest --coverage",
+    "analyze": "nuxt build --analyze",
+    "lighthouse": "npm run build && npm run preview & sleep 5 && npx lighthouse http://localhost:3000 --view && pkill -f 'nuxt preview'"
   },
   "dependencies": {
     "@heroicons/vue": "^2.2.0",

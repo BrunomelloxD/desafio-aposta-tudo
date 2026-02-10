@@ -1,0 +1,81 @@
+services:
+  # Backend API
+  nest-api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: nest-api
+    command: npm run start:dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./api/src:/home/node/app/src
+    depends_on:
+      database:
+        condition: service_healthy
+    env_file:
+      - ./api/.env
+    networks:
+      - app-network
+
+  # Migration Service
+  nest-api-migrate:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: nest-api-migrate
+    command: npx prisma migrate deploy
+    depends_on:
+      database:
+        condition: service_healthy
+    env_file:
+      - ./api/.env
+    networks:
+      - app-network
+    restart: 'no'
+
+  # Database
+  database:
+    image: postgres:13
+    container_name: database
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123
+      POSTGRES_DB: desafio_aposta_tudo
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d desafio_aposta_tudo"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+    networks:
+      - app-network
+
+  # Frontend
+  nuxt-frontend:
+    build:
+      context: ./front
+      dockerfile: Dockerfile
+    container_name: nuxt-frontend
+    ports:
+      - "8080:8080"
+    environment:
+      - NODE_ENV=production
+      - NUXT_PUBLIC_API_BASE=${NUXT_PUBLIC_API_BASE:-http://localhost:3000}
+    restart: unless-stopped
+    depends_on:
+      - nest-api
+    networks:
+      - app-network
+
+volumes:
+  postgres:
+
+networks:
+  app-network:
+    driver: bridge

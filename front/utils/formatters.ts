@@ -1,10 +1,13 @@
 /**
  * Funções utilitárias para formatação de dados
+ * Centraliza lógica de formatação para manter consistência
  */
 
 /**
  * Formata uma data ISO para o formato brasileiro (dd/mm/yyyy)
  * Extrai apenas a parte da data (YYYY-MM-DD) sem considerar timezone
+ * @param dateString - Data no formato ISO (YYYY-MM-DDTHH:mm:ss.sssZ)
+ * @returns Data formatada (dd/mm/yyyy) ou '-' se inválida
  */
 export const formatDate = (dateString: string): string => {
   if (!dateString) return '-'
@@ -23,6 +26,8 @@ export const formatDate = (dateString: string): string => {
 
 /**
  * Formata uma data para o formato ISO (yyyy-mm-dd)
+ * @param date - Data como Date ou string
+ * @returns Data no formato ISO (yyyy-mm-dd)
  */
 export const formatDateToISO = (date: Date | string): string => {
   const d = typeof date === 'string' ? new Date(date) : date
@@ -31,13 +36,16 @@ export const formatDateToISO = (date: Date | string): string => {
 
 /**
  * Retorna a data de hoje no formato ISO
+ * @returns Data atual no formato yyyy-mm-dd
  */
 export const getTodayISO = (): string => {
   return formatDateToISO(new Date())
 }
 
 /**
- * Verifica se uma data é futura
+ * Verifica se uma data é futura (hoje ou posterior)
+ * @param dateString - Data no formato yyyy-mm-dd
+ * @returns true se a data for hoje ou no futuro
  */
 export const isFutureDate = (dateString: string): boolean => {
   const date = new Date(dateString)

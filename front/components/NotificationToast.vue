@@ -5,7 +5,7 @@
         <div
           v-for="notification in notifications"
           :key="notification.id"
-          class="pointer-events-auto w-full bg-white shadow-lg rounded-lg ring-1 ring-black ring-opacity-5 overflow-hidden"
+          class="pointer-events-auto w-full bg-dark-light shadow-lg rounded-lg ring-1 ring-dark-lighter border border-dark-lighter overflow-hidden"
         >
           <div class="p-4">
             <div class="flex items-start">
@@ -13,14 +13,14 @@
                 <component :is="getIcon(notification.type)" :class="getIconClass(notification.type)" class="h-6 w-6" />
               </div>
               <div class="ml-3 w-0 flex-1 pt-0.5">
-                <p class="text-sm font-medium text-gray-900">
+                <p class="text-sm font-medium text-white">
                   {{ notification.message }}
                 </p>
               </div>
               <div class="ml-4 flex-shrink-0 flex">
                 <button
                   @click="remove(notification.id)"
-                  class="bg-white rounded-md inline-flex text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  class="bg-dark-light rounded-md inline-flex text-gray-400 hover:text-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors duration-150"
                 >
                   <span class="sr-only">Fechar</span>
                   <XMarkIcon class="h-5 w-5" />
@@ -51,12 +51,12 @@ const getIcon = (type: string) => {
 
 const getIconClass = (type: string) => {
   const classes = {
-    success: 'text-green-500',
-    error: 'text-red-500',
-    warning: 'text-yellow-500',
-    info: 'text-blue-500'
+    success: 'text-green-400',
+    error: 'text-accent',
+    warning: 'text-yellow-400',
+    info: 'text-primary-light'
   }
-  return classes[type as keyof typeof classes] || 'text-gray-500'
+  return classes[type as keyof typeof classes] || 'text-gray-400'
 }
 </script>
 

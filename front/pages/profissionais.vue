@@ -3,13 +3,13 @@
     <!-- Header -->
     <div class="sm:flex sm:items-center sm:justify-between mb-8">
       <div>
-        <h1 class="text-3xl font-bold text-gray-900">Profissionais</h1>
-        <p class="mt-2 text-sm text-gray-700">Gerencie os profissionais cadastrados</p>
+        <h1 class="text-3xl font-bold text-white">Profissionais</h1>
+        <p class="mt-2 text-sm text-gray-400">Gerencie os profissionais cadastrados</p>
       </div>
       <div class="mt-4 sm:mt-0">
         <button
           @click="openCreateModal"
-          class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-accent hover:bg-accent-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent transition-all duration-200"
         >
           Novo Profissional
         </button>
@@ -23,25 +23,24 @@
           v-model="searchQuery"
           type="text"
           placeholder="Buscar por nome..."
-          class="block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+          class="block w-full px-4 py-2 bg-dark-light border border-dark-lighter rounded-md shadow-sm text-white placeholder-gray-500 focus:ring-primary focus:border-primary transition-all duration-200"
           @keyup.enter="performSearch"
         />
       </div>
       <div class="w-18">
         <select
           v-model="limit"
-          class="block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+          class="block w-full px-4 py-2 bg-dark-light border border-dark-lighter rounded-md shadow-sm text-white focus:ring-primary focus:border-primary transition-all duration-200"
         >
-          <option :value="5">5</option>
-          <option :value="10">10</option>
-          <option :value="25">25</option>
-          <option :value="50">50</option>
+          <option v-for="option in PAGINATION.LIMIT_OPTIONS" :key="option" :value="option">
+            {{ option }}
+          </option>
         </select>
       </div>
       <div>
         <button
           @click="performSearch"
-          class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          class="px-6 py-2 bg-primary text-white rounded-md hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all duration-200 font-medium"
         >
           Buscar
         </button>
@@ -50,36 +49,66 @@
 
     <!-- Loading State -->
     <div v-if="pending" class="text-center py-12">
-      <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-      <p class="mt-4 text-gray-600">Carregando...</p>
+      <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      <p class="mt-4 text-gray-400">Carregando...</p>
     </div>
 
     <!-- Error State -->
-    <div v-else-if="error" class="bg-red-50 border border-red-200 rounded-md p-4">
-      <p class="text-red-800">Erro ao carregar profissionais: {{ error.message }}</p>
+    <div v-else-if="error" class="bg-red-900/30 border border-red-500/50 rounded-md p-4">
+      <p class="text-red-300">Erro ao carregar profissionais: {{ error.message }}</p>
+    </div>
+
+    <!-- Empty State -->
+    <div v-else-if="data && data.data.length === 0 && !activeSearch" class="text-center py-12">
+      <div class="bg-dark-light rounded-lg border border-dark-lighter p-8">
+        <div class="text-6xl mb-4">👥</div>
+        <h3 class="text-xl font-semibold text-white mb-2">Nenhum profissional cadastrado</h3>
+        <p class="text-gray-400 mb-6">Não há dados cadastrados no momento, por favor, inicie um cadastro</p>
+        <button
+          @click="openCreateModal"
+          class="inline-flex items-center px-6 py-3 bg-accent text-white rounded-md hover:bg-accent-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent transition-all duration-200 font-medium"
+        >
+          Criar Primeiro Profissional
+        </button>
+      </div>
+    </div>
+
+    <!-- No Results State -->
+    <div v-else-if="data && data.data.length === 0 && activeSearch" class="text-center py-12">
+      <div class="bg-dark-light rounded-lg border border-dark-lighter p-8">
+        <div class="text-6xl mb-4">🔍</div>
+        <h3 class="text-xl font-semibold text-white mb-2">Nenhum resultado encontrado</h3>
+        <p class="text-gray-400 mb-6">Tente ajustar sua pesquisa ou limpe os filtros</p>
+        <button
+          @click="clearSearch"
+          class="inline-flex items-center px-6 py-3 bg-primary text-white rounded-md hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all duration-200 font-medium"
+        >
+          Limpar Pesquisa
+        </button>
+      </div>
     </div>
 
     <!-- Table -->
-    <div v-else-if="data" class="bg-white shadow overflow-hidden sm:rounded-lg">
-      <table class="min-w-full divide-y divide-gray-200">
-        <thead class="bg-gray-50">
+    <div v-else-if="data" class="bg-dark-light shadow-lg overflow-hidden rounded-lg border border-dark-lighter">
+      <table class="min-w-full divide-y divide-dark-lighter">
+        <thead class="bg-dark-lighter">
           <tr>
-            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
               Nome
             </th>
-            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
               Nível
             </th>
-            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
               Sexo
             </th>
-            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
               Data Nascimento
             </th>
-            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
               Idade
             </th>
-            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
               Hobby
             </th>
             <th scope="col" class="relative px-6 py-3">
@@ -87,36 +116,36 @@
             </th>
           </tr>
         </thead>
-        <tbody class="bg-white divide-y divide-gray-200">
-          <tr v-for="profissional in data.data" :key="profissional.id">
-            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+        <tbody class="bg-dark-light divide-y divide-dark-lighter">
+          <tr v-for="profissional in data.data" :key="profissional.id" class="hover:bg-dark-lighter transition-colors duration-150">
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">
               {{ profissional.nome }}
             </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
               {{ profissional.nivel || '-' }}
             </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
               {{ profissional.sexo }}
             </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
               {{ formatDate(profissional.data_nascimento) }}
             </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
               {{ profissional.idade }} anos
             </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
               {{ profissional.hobby }}
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
               <button
                 @click="openEditModal(profissional)"
-                class="text-blue-600 hover:text-blue-900 mr-4"
+                class="text-primary hover:text-primary-light mr-4 transition-colors duration-150"
               >
                 Editar
               </button>
               <button
                 @click="confirmDelete(profissional)"
-                class="text-red-600 hover:text-red-900"
+                class="text-accent hover:text-accent-light transition-colors duration-150"
               >
                 Excluir
               </button>
@@ -126,32 +155,32 @@
       </table>
 
       <!-- Pagination -->
-      <div class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
+      <div class="bg-dark-light px-4 py-3 flex items-center justify-between border-t border-dark-lighter sm:px-6">
         <div class="flex-1 flex justify-between sm:hidden">
           <button
             @click="prevPage"
             :disabled="currentPage === 1"
-            class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            class="relative inline-flex items-center px-4 py-2 border border-dark-lighter text-sm font-medium rounded-md text-gray-300 bg-dark-lighter hover:bg-dark disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
           >
             Anterior
           </button>
           <button
             @click="nextPage"
             :disabled="currentPage >= data.meta.last_page"
-            class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            class="ml-3 relative inline-flex items-center px-4 py-2 border border-dark-lighter text-sm font-medium rounded-md text-gray-300 bg-dark-lighter hover:bg-dark disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
           >
             Próxima
           </button>
         </div>
         <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
           <div>
-            <p class="text-sm text-gray-700">
+            <p class="text-sm text-gray-400">
               Mostrando
-              <span class="font-medium">{{ (data.meta.page - 1) * limit + 1 }}</span>
+              <span class="font-medium text-white">{{ (data.meta.page - 1) * limit + 1 }}</span>
               até
-              <span class="font-medium">{{ Math.min(data.meta.page * limit, data.meta.total) }}</span>
+              <span class="font-medium text-white">{{ Math.min(data.meta.page * limit, data.meta.total) }}</span>
               de
-              <span class="font-medium">{{ data.meta.total }}</span>
+              <span class="font-medium text-white">{{ data.meta.total }}</span>
               resultados
             </p>
           </div>
@@ -160,7 +189,7 @@
               <button
                 @click="prevPage"
                 :disabled="currentPage === 1"
-                class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-dark-lighter bg-dark-lighter text-sm font-medium text-gray-300 hover:bg-dark disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
               >
                 <span class="sr-only">Anterior</span>
                 ←
@@ -170,10 +199,10 @@
                 :key="page"
                 @click="goToPage(page)"
                 :class="[
-                  'relative inline-flex items-center px-4 py-2 border text-sm font-medium',
+                  'relative inline-flex items-center px-4 py-2 border text-sm font-medium transition-all duration-200',
                   page === currentPage
-                    ? 'z-10 bg-blue-50 border-blue-500 text-blue-600'
-                    : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50'
+                    ? 'z-10 bg-primary border-primary text-white'
+                    : 'bg-dark-lighter border-dark-lighter text-gray-300 hover:bg-dark'
                 ]"
               >
                 {{ page }}
@@ -181,7 +210,7 @@
               <button
                 @click="nextPage"
                 :disabled="currentPage >= data.meta.last_page"
-                class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-dark-lighter bg-dark-lighter text-sm font-medium text-gray-300 hover:bg-dark disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
               >
                 <span class="sr-only">Próxima</span>
                 →
@@ -195,14 +224,14 @@
     <!-- Form Modal -->
     <UiModal v-model="showModal" size="lg">
       <form @submit.prevent="handleSubmit">
-        <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-          <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">
+        <div class="bg-dark-light px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+          <h3 class="text-lg leading-6 font-medium text-white mb-4">
             {{ editingProfissional ? 'Editar Profissional' : 'Novo Profissional' }}
           </h3>
           
           <div class="space-y-4">
             <div>
-              <label for="nome" class="block text-sm font-medium text-gray-700 mb-2">
+              <label for="nome" class="block text-sm font-medium text-gray-300 mb-2">
                 Nome *
               </label>
               <input
@@ -210,20 +239,20 @@
                 type="text"
                 id="nome"
                 required
-                class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                class="block w-full px-3 py-2 bg-dark border border-dark-lighter rounded-md shadow-sm text-white placeholder-gray-500 focus:ring-primary focus:border-primary transition-all duration-200"
                 placeholder="Digite o nome"
               />
             </div>
 
             <div>
-              <label for="nivel_id" class="block text-sm font-medium text-gray-700 mb-2">
+              <label for="nivel_id" class="block text-sm font-medium text-gray-300 mb-2">
                 Nível *
               </label>
               <select
                 v-model="formData.nivel_id"
                 id="nivel_id"
                 required
-                class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                class="block w-full px-3 py-2 bg-dark border border-dark-lighter rounded-md shadow-sm text-white focus:ring-primary focus:border-primary transition-all duration-200"
               >
                 <option value="">Selecione um nível</option>
                 <option v-for="nivel in niveis" :key="nivel.id" :value="nivel.id">
@@ -233,24 +262,24 @@
             </div>
 
             <div>
-              <label for="sexo" class="block text-sm font-medium text-gray-700 mb-2">
+              <label for="sexo" class="block text-sm font-medium text-gray-300 mb-2">
                 Sexo *
               </label>
               <select
                 v-model="formData.sexo"
                 id="sexo"
                 required
-                class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                class="block w-full px-3 py-2 bg-dark border border-dark-lighter rounded-md shadow-sm text-white focus:ring-primary focus:border-primary transition-all duration-200"
               >
                 <option value="">Selecione</option>
-                <option value="Masculino">Masculino</option>
-                <option value="Feminino">Feminino</option>
-                <option value="Outro">Outro</option>
+                <option v-for="option in SEXO_OPTIONS" :key="option.value" :value="option.value">
+                  {{ option.label }}
+                </option>
               </select>
             </div>
 
             <div>
-              <label for="data_nascimento" class="block text-sm font-medium text-gray-700 mb-2">
+              <label for="data_nascimento" class="block text-sm font-medium text-gray-300 mb-2">
                 Data de Nascimento *
               </label>
               <input
@@ -259,13 +288,13 @@
                 id="data_nascimento"
                 required
                 :max="maxDate"
-                class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                class="block w-full px-3 py-2 bg-dark border border-dark-lighter rounded-md shadow-sm text-white focus:ring-primary focus:border-primary transition-all duration-200 [color-scheme:dark]"
               />
               <p class="mt-1 text-xs text-gray-500">A data deve ser anterior a hoje</p>
             </div>
 
             <div>
-              <label for="hobby" class="block text-sm font-medium text-gray-700 mb-2">
+              <label for="hobby" class="block text-sm font-medium text-gray-300 mb-2">
                 Hobby *
               </label>
               <input
@@ -273,17 +302,17 @@
                 type="text"
                 id="hobby"
                 required
-                class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                class="block w-full px-3 py-2 bg-dark border border-dark-lighter rounded-md shadow-sm text-white placeholder-gray-500 focus:ring-primary focus:border-primary transition-all duration-200"
                 placeholder="Digite o hobby"
               />
             </div>
           </div>
         </div>
-        <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+        <div class="bg-dark-lighter px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
           <button
             type="submit"
             :disabled="isSubmitting"
-            class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50"
+            class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-primary text-base font-medium text-white hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50 transition-all duration-200"
           >
             {{ isSubmitting ? 'Salvando...' : 'Salvar' }}
           </button>
@@ -291,7 +320,7 @@
             type="button"
             @click="closeModal"
             :disabled="isSubmitting"
-            class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50"
+            class="mt-3 w-full inline-flex justify-center rounded-md border border-dark-lighter shadow-sm px-4 py-2 bg-dark text-base font-medium text-gray-300 hover:bg-dark-lighter focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50 transition-all duration-200"
           >
             Cancelar
           </button>
@@ -317,14 +346,16 @@
 
 <script setup lang="ts">
 import type { Profissional, Nivel } from '~/types'
-import { formatDate } from '~/utils/formatters'
+import type { Sexo } from '~/utils/constants'
+import { formatDate, isFutureDate, getTodayISO } from '~/utils/formatters'
+import { PAGINATION, SEXO_OPTIONS } from '~/utils/constants'
 
 const { fetchProfissionais, createProfissional, updateProfissional, deleteProfissional } = useProfissionais()
 const { fetchNiveis } = useNiveis()
 const { success, error: notifyError } = useNotification()
 
-const currentPage = ref(1)
-const limit = ref(10)
+const currentPage = ref(PAGINATION.DEFAULT_PAGE)
+const limit = ref(PAGINATION.DEFAULT_LIMIT)
 const searchQuery = ref('')
 const activeSearch = ref('')
 
@@ -338,6 +369,13 @@ const { data, pending, error, refresh } = await useAsyncData(
 
 const performSearch = () => {
   activeSearch.value = searchQuery.value
+  currentPage.value = 1
+  refresh()
+}
+
+const clearSearch = () => {
+  searchQuery.value = ''
+  activeSearch.value = ''
   currentPage.value = 1
   refresh()
 }
@@ -359,7 +397,7 @@ const editingProfissional = ref<Profissional | null>(null)
 const formData = ref({
   nome: '',
   nivel_id: '',
-  sexo: '' as 'Masculino' | 'Feminino' | 'Outro' | '',
+  sexo: '' as Sexo | '',
   data_nascimento: '',
   hobby: ''
 })
@@ -369,10 +407,7 @@ const showDeleteDialog = ref(false)
 const profissionalToDelete = ref<Profissional | null>(null)
 const isDeleting = ref(false)
 
-const maxDate = computed(() => {
-  const today = new Date()
-  return today.toISOString().split('T')[0]
-})
+const maxDate = computed(() => getTodayISO())
 
 const visiblePages = computed(() => {
   if (!data.value) return []
@@ -443,11 +478,7 @@ const handleSubmit = async () => {
     return
   }
 
-  const birthDate = new Date(formData.value.data_nascimento)
-  const today = new Date()
-  today.setHours(0, 0, 0, 0)
-  
-  if (birthDate >= today) {
+  if (isFutureDate(formData.value.data_nascimento)) {
     notifyError('A data de nascimento deve ser anterior a hoje')
     return
   }
@@ -457,7 +488,7 @@ const handleSubmit = async () => {
     const data = {
       nome: formData.value.nome,
       nivel_id: formData.value.nivel_id,
-      sexo: formData.value.sexo as 'Masculino' | 'Feminino' | 'Outro',
+      sexo: formData.value.sexo as Sexo,
       data_nascimento: formData.value.data_nascimento,
       hobby: formData.value.hobby
     }

@@ -18,6 +18,7 @@ describe('LevelService', () => {
         update: jest.fn(),
         delete: jest.fn(),
         findAll: jest.fn(),
+        existsByName: jest.fn(),
     };
 
     const mockProfessionalRepository = {

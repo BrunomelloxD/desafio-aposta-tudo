@@ -1,3 +1,5 @@
+import { NOTIFICATION } from '~/utils/constants'
+
 interface Notification {
   id: string
   type: 'success' | 'error' | 'warning' | 'info'
@@ -7,11 +9,15 @@ interface Notification {
 
 const notifications = ref<Notification[]>([])
 
+/**
+ * Composable para gerenciar notificações toast
+ * Fornece métodos para exibir notificações de sucesso, erro, aviso e informação
+ */
 export const useNotification = () => {
   const notify = (
     message: string,
     type: Notification['type'] = 'info',
-    duration: number = 3000
+    duration: number = NOTIFICATION.AUTO_DISMISS_DELAY
   ) => {
     const id = Date.now().toString() + Math.random().toString(36)
     
