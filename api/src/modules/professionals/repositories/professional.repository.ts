@@ -1,10 +1,10 @@
 import { Injectable } from "@nestjs/common";
 import { IProfessionalRepository } from "./professional.repository.interface";
 import { PrismaService } from "src/common/prisma/services/prisma.service";
-import { PaginationDto } from "src/common/dtos/pagination.dto";
-import { PaginatedResponseDto } from "src/common/dtos/paginated-response.dto";
+import { PaginationDto } from "src/common/dtos/request/pagination.dto";
+import { PaginatedResponseDto } from "src/common/dtos/response/paginated-response.dto";
 import { ProfessionalResponseDto } from "../dtos/response/professional-response.dto";
-import { CreateProfessionalDto } from "../dtos/create-professional.dto";
+import { CreateProfessionalDto } from "../dtos/request/create-professional.dto";
 
 @Injectable()
 export class ProfessionalRepository implements IProfessionalRepository {

@@ -1,8 +1,8 @@
 import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import { LevelRepository } from "../repositories/level.repository";
-import { PaginatedResponseDto } from "src/common/dtos/paginated-response.dto";
-import { PaginationDto } from "src/common/dtos/pagination.dto";
-import { CreateLevelDto } from "../dtos/create-level.dto";
+import { PaginatedResponseDto } from "src/common/dtos/response/paginated-response.dto";
+import { PaginationDto } from "src/common/dtos/request/pagination.dto";
+import { CreateLevelDto } from "../dtos/request/create-level.dto";
 import { LevelResponseDto } from "../dtos/response/level-response.dto";
 import { ProfessionalRepository } from "src/modules/professionals/repositories/professional.repository";
 

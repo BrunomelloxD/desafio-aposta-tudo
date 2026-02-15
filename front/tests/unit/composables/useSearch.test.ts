@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest'
-import { useSearch } from '~/composables/useSearch'
+import { useSearch } from '~/src/shared/composables/useSearch'
 
 describe('useSearch', () => {
   let search: ReturnType<typeof useSearch>

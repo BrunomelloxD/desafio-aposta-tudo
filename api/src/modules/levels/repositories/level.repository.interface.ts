@@ -1,4 +1,4 @@
-import { CreateLevelDto } from "../dtos/create-level.dto";
+import { CreateLevelDto } from "../dtos/request/create-level.dto";
 import { LevelResponseDto } from "../dtos/response/level-response.dto";
 import { IBaseRepository } from "src/common/interfaces/base-repository.interface";
 

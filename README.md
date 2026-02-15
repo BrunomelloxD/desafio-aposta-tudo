@@ -158,7 +158,6 @@ npm run test:coverage
 -   **Swagger/OpenAPI**: Documentação automática da API, facilitando integração
 
 #### Frontend (Nuxt.js)
--   **Composables**: Lógica reutilizável com `useProfissionais`, `useNiveis`, `usePagination`, `useSearch`
 -   **Componentes atômicos**: Estrutura bem definida com componentes reutilizáveis
 -   **TypeScript**: Type-safety em todo o projeto
 -   **Tailwind CSS**: Estilização rápida e consistente

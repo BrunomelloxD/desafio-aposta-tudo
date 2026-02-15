@@ -1,10 +1,157 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1770691055012" clover="3.2.0">
-  <project timestamp="1770691055012" name="All files">
-    <metrics statements="86" coveredstatements="84" conditionals="46" coveredconditionals="44" methods="21" coveredmethods="20" elements="153" coveredelements="148" complexity="0" loc="86" ncloc="86" packages="3" files="6" classes="6"/>
-    <package name="components.common">
+<coverage generated="1771123035299" clover="3.2.0">
+  <project timestamp="1771123035299" name="All files">
+    <metrics statements="112" coveredstatements="110" conditionals="55" coveredconditionals="51" methods="32" coveredmethods="31" elements="199" coveredelements="192" complexity="0" loc="112" ncloc="112" packages="7" files="9" classes="9"/>
+    <package name="shared.composables">
+      <metrics statements="45" coveredstatements="45" conditionals="11" coveredconditionals="11" methods="9" coveredmethods="9"/>
+      <file name="usePagination.ts" path="/home/bruno/www/desafio-aposta-tudo/front/src/shared/composables/usePagination.ts">
+        <metrics statements="36" coveredstatements="36" conditionals="11" coveredconditionals="11" methods="6" coveredmethods="6"/>
+        <line num="3" count="1" type="cond" truecount="1" falsecount="0"/>
+        <line num="4" count="11" type="stmt"/>
+        <line num="5" count="11" type="stmt"/>
+        <line num="7" count="11" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
+        <line num="11" count="11" type="stmt"/>
+        <line num="12" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="13" count="1" type="stmt"/>
+        <line num="17" count="11" type="stmt"/>
+        <line num="18" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="19" count="1" type="stmt"/>
+        <line num="23" count="11" type="stmt"/>
+        <line num="24" count="1" type="stmt"/>
+        <line num="27" count="11" type="stmt"/>
+        <line num="28" count="4" type="stmt"/>
+        <line num="29" count="4" type="stmt"/>
+        <line num="32" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="33" count="1" type="stmt"/>
+        <line num="34" count="5" type="stmt"/>
+        <line num="36" count="1" type="stmt"/>
+        <line num="40" count="3" type="stmt"/>
+        <line num="43" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="44" count="1" type="stmt"/>
+        <line num="45" count="4" type="stmt"/>
+        <line num="47" count="1" type="stmt"/>
+        <line num="48" count="1" type="stmt"/>
+        <line num="52" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="53" count="1" type="stmt"/>
+        <line num="54" count="5" type="stmt"/>
+        <line num="56" count="1" type="stmt"/>
+        <line num="60" count="1" type="stmt"/>
+        <line num="61" count="1" type="stmt"/>
+        <line num="62" count="1" type="stmt"/>
+        <line num="63" count="1" type="stmt"/>
+        <line num="65" count="1" type="stmt"/>
+        <line num="68" count="11" type="stmt"/>
+      </file>
+      <file name="useSearch.ts" path="/home/bruno/www/desafio-aposta-tudo/front/src/shared/composables/useSearch.ts">
+        <metrics statements="9" coveredstatements="9" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="3"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="3" type="stmt"/>
+        <line num="3" count="3" type="stmt"/>
+        <line num="5" count="3" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="9" count="3" type="stmt"/>
+        <line num="10" count="1" type="stmt"/>
+        <line num="11" count="1" type="stmt"/>
+        <line num="14" count="3" type="stmt"/>
+      </file>
+    </package>
+    <package name="shared.error">
+      <metrics statements="15" coveredstatements="15" conditionals="16" coveredconditionals="15" methods="3" coveredmethods="3"/>
+      <file name="errorHandler.ts" path="/home/bruno/www/desafio-aposta-tudo/front/src/shared/error/errorHandler.ts">
+        <metrics statements="15" coveredstatements="15" conditionals="16" coveredconditionals="15" methods="3" coveredmethods="3"/>
+        <line num="20" count="1" type="stmt"/>
+        <line num="21" count="5" type="cond" truecount="2" falsecount="0"/>
+        <line num="23" count="4" type="stmt"/>
+        <line num="26" count="4" type="cond" truecount="1" falsecount="1"/>
+        <line num="29" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="32" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="35" count="2" type="cond" truecount="4" falsecount="0"/>
+        <line num="36" count="1" type="stmt"/>
+        <line num="40" count="1" type="stmt"/>
+        <line num="43" count="1" type="stmt"/>
+        <line num="44" count="3" type="stmt"/>
+        <line num="45" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="48" count="1" type="stmt"/>
+        <line num="49" count="2" type="stmt"/>
+        <line num="50" count="2" type="cond" truecount="2" falsecount="0"/>
+      </file>
+    </package>
+    <package name="shared.utils">
+      <metrics statements="26" coveredstatements="25" conditionals="13" coveredconditionals="11" methods="4" coveredmethods="4"/>
+      <file name="constants.ts" path="/home/bruno/www/desafio-aposta-tudo/front/src/shared/utils/constants.ts">
+        <metrics statements="7" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="2" type="stmt"/>
+        <line num="7" count="2" type="stmt"/>
+        <line num="11" count="2" type="stmt"/>
+        <line num="19" count="2" type="stmt"/>
+        <line num="24" count="2" type="stmt"/>
+        <line num="32" count="2" type="stmt"/>
+        <line num="40" count="2" type="stmt"/>
+      </file>
+      <file name="formatters.ts" path="/home/bruno/www/desafio-aposta-tudo/front/src/shared/utils/formatters.ts">
+        <metrics statements="19" coveredstatements="18" conditionals="13" coveredconditionals="11" methods="4" coveredmethods="4"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="6" count="5" type="cond" truecount="2" falsecount="0"/>
+        <line num="8" count="4" type="stmt"/>
+        <line num="9" count="4" type="stmt"/>
+        <line num="10" count="4" type="cond" truecount="1" falsecount="1"/>
+        <line num="12" count="4" type="stmt"/>
+        <line num="14" count="4" type="cond" truecount="5" falsecount="0"/>
+        <line num="16" count="3" type="stmt"/>
+        <line num="18" count="0" type="stmt"/>
+        <line num="22" count="1" type="stmt"/>
+        <line num="23" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="24" count="3" type="cond" truecount="1" falsecount="1"/>
+        <line num="27" count="1" type="stmt"/>
+        <line num="28" count="1" type="stmt"/>
+        <line num="31" count="1" type="stmt"/>
+        <line num="32" count="2" type="stmt"/>
+        <line num="33" count="2" type="stmt"/>
+        <line num="34" count="2" type="stmt"/>
+        <line num="35" count="2" type="stmt"/>
+      </file>
+    </package>
+    <package name="ui.app.modules.nivel.domain">
+      <metrics statements="7" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="4" coveredmethods="4"/>
+      <file name="Nivel.ts" path="/home/bruno/www/desafio-aposta-tudo/front/src/ui/app/modules/nivel/domain/Nivel.ts">
+        <metrics statements="7" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="4" coveredmethods="4"/>
+        <line num="5" count="2" type="stmt"/>
+        <line num="6" count="2" type="stmt"/>
+        <line num="7" count="2" type="stmt"/>
+        <line num="8" count="2" type="stmt"/>
+        <line num="12" count="1" type="stmt"/>
+        <line num="21" count="9" type="stmt"/>
+        <line num="25" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="ui.app.modules.nivel.infrastructure">
+      <metrics statements="8" coveredstatements="8" conditionals="3" coveredconditionals="3" methods="5" coveredmethods="5"/>
+      <file name="NivelRepository.ts" path="/home/bruno/www/desafio-aposta-tudo/front/src/ui/app/modules/nivel/infrastructure/NivelRepository.ts">
+        <metrics statements="8" coveredstatements="8" conditionals="3" coveredconditionals="3" methods="5" coveredmethods="5"/>
+        <line num="16" count="5" type="stmt"/>
+        <line num="24" count="2" type="stmt"/>
+        <line num="29" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="30" count="1" type="stmt"/>
+        <line num="33" count="2" type="stmt"/>
+        <line num="37" count="1" type="stmt"/>
+        <line num="41" count="1" type="stmt"/>
+        <line num="45" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="ui.app.modules.nivel.usecase">
+      <metrics statements="4" coveredstatements="4" conditionals="2" coveredconditionals="2" methods="2" coveredmethods="2"/>
+      <file name="CreateNivel.ts" path="/home/bruno/www/desafio-aposta-tudo/front/src/ui/app/modules/nivel/usecase/CreateNivel.ts">
+        <metrics statements="4" coveredstatements="4" conditionals="2" coveredconditionals="2" methods="2" coveredmethods="2"/>
+        <line num="6" count="4" type="stmt"/>
+        <line num="9" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="10" count="2" type="stmt"/>
+        <line num="13" count="2" type="stmt"/>
+      </file>
+    </package>
+    <package name="ui.components.common">
       <metrics statements="7" coveredstatements="6" conditionals="10" coveredconditionals="9" methods="5" coveredmethods="4"/>
-      <file name="SearchBar.vue" path="/home/bruno/teste-desafio/desafio-aposta-tudo/front/components/common/SearchBar.vue">
+      <file name="SearchBar.vue" path="/home/bruno/www/desafio-aposta-tudo/front/src/ui/components/common/SearchBar.vue">
         <metrics statements="7" coveredstatements="6" conditionals="10" coveredconditionals="9" methods="5" coveredmethods="4"/>
         <line num="2" count="6" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
@@ -13,106 +160,6 @@
         <line num="16" count="0" type="cond" truecount="2" falsecount="0"/>
         <line num="19" count="20" type="stmt"/>
         <line num="26" count="1" type="cond" truecount="2" falsecount="0"/>
-      </file>
-    </package>
-    <package name="composables">
-      <metrics statements="39" coveredstatements="39" conditionals="11" coveredconditionals="11" methods="9" coveredmethods="9"/>
-      <file name="usePagination.ts" path="/home/bruno/teste-desafio/desafio-aposta-tudo/front/composables/usePagination.ts">
-        <metrics statements="30" coveredstatements="30" conditionals="11" coveredconditionals="11" methods="6" coveredmethods="6"/>
-        <line num="7" count="1" type="cond" truecount="1" falsecount="0"/>
-        <line num="8" count="11" type="stmt"/>
-        <line num="9" count="11" type="stmt"/>
-        <line num="14" count="11" type="stmt"/>
-        <line num="15" count="1" type="stmt"/>
-        <line num="22" count="11" type="stmt"/>
-        <line num="23" count="2" type="cond" truecount="2" falsecount="0"/>
-        <line num="24" count="1" type="stmt"/>
-        <line num="31" count="11" type="stmt"/>
-        <line num="32" count="2" type="cond" truecount="2" falsecount="0"/>
-        <line num="33" count="1" type="stmt"/>
-        <line num="41" count="11" type="stmt"/>
-        <line num="42" count="1" type="stmt"/>
-        <line num="50" count="11" type="stmt"/>
-        <line num="51" count="4" type="stmt"/>
-        <line num="52" count="4" type="stmt"/>
-        <line num="54" count="4" type="cond" truecount="2" falsecount="0"/>
-        <line num="55" count="1" type="stmt"/>
-        <line num="56" count="5" type="stmt"/>
-        <line num="59" count="3" type="cond" truecount="2" falsecount="0"/>
-        <line num="60" count="5" type="stmt"/>
-        <line num="61" count="1" type="stmt"/>
-        <line num="62" count="2" type="cond" truecount="2" falsecount="0"/>
-        <line num="63" count="1" type="stmt"/>
-        <line num="64" count="5" type="stmt"/>
-        <line num="66" count="1" type="stmt"/>
-        <line num="67" count="3" type="stmt"/>
-        <line num="68" count="1" type="stmt"/>
-        <line num="72" count="4" type="stmt"/>
-        <line num="75" count="11" type="stmt"/>
-      </file>
-      <file name="useSearch.ts" path="/home/bruno/teste-desafio/desafio-aposta-tudo/front/composables/useSearch.ts">
-        <metrics statements="9" coveredstatements="9" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="3"/>
-        <line num="5" count="1" type="stmt"/>
-        <line num="6" count="3" type="stmt"/>
-        <line num="7" count="3" type="stmt"/>
-        <line num="12" count="3" type="stmt"/>
-        <line num="13" count="1" type="stmt"/>
-        <line num="19" count="3" type="stmt"/>
-        <line num="20" count="1" type="stmt"/>
-        <line num="21" count="1" type="stmt"/>
-        <line num="24" count="3" type="stmt"/>
-      </file>
-    </package>
-    <package name="utils">
-      <metrics statements="40" coveredstatements="39" conditionals="25" coveredconditionals="24" methods="7" coveredmethods="7"/>
-      <file name="constants.ts" path="/home/bruno/teste-desafio/desafio-aposta-tudo/front/utils/constants.ts">
-        <metrics statements="7" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="9" count="2" type="stmt"/>
-        <line num="18" count="2" type="stmt"/>
-        <line num="25" count="2" type="stmt"/>
-        <line num="40" count="2" type="stmt"/>
-        <line num="48" count="2" type="stmt"/>
-        <line num="59" count="2" type="stmt"/>
-        <line num="70" count="2" type="stmt"/>
-      </file>
-      <file name="errorHandler.ts" path="/home/bruno/teste-desafio/desafio-aposta-tudo/front/utils/errorHandler.ts">
-        <metrics statements="15" coveredstatements="15" conditionals="16" coveredconditionals="15" methods="3" coveredmethods="3"/>
-        <line num="6" count="1" type="stmt"/>
-        <line num="7" count="3" type="stmt"/>
-        <line num="8" count="3" type="stmt"/>
-        <line num="19" count="1" type="stmt"/>
-        <line num="20" count="2" type="stmt"/>
-        <line num="21" count="2" type="stmt"/>
-        <line num="54" count="1" type="stmt"/>
-        <line num="55" count="5" type="cond" truecount="2" falsecount="0"/>
-        <line num="57" count="4" type="stmt"/>
-        <line num="60" count="4" type="cond" truecount="1" falsecount="1"/>
-        <line num="63" count="4" type="cond" truecount="2" falsecount="0"/>
-        <line num="66" count="3" type="cond" truecount="2" falsecount="0"/>
-        <line num="69" count="2" type="cond" truecount="4" falsecount="0"/>
-        <line num="70" count="1" type="stmt"/>
-        <line num="74" count="1" type="stmt"/>
-      </file>
-      <file name="formatters.ts" path="/home/bruno/teste-desafio/desafio-aposta-tudo/front/utils/formatters.ts">
-        <metrics statements="18" coveredstatements="17" conditionals="9" coveredconditionals="9" methods="4" coveredmethods="4"/>
-        <line num="12" count="1" type="stmt"/>
-        <line num="13" count="5" type="cond" truecount="2" falsecount="0"/>
-        <line num="15" count="4" type="stmt"/>
-        <line num="16" count="4" type="stmt"/>
-        <line num="17" count="4" type="stmt"/>
-        <line num="19" count="4" type="cond" truecount="5" falsecount="0"/>
-        <line num="21" count="3" type="stmt"/>
-        <line num="23" count="0" type="stmt"/>
-        <line num="32" count="1" type="stmt"/>
-        <line num="33" count="3" type="cond" truecount="2" falsecount="0"/>
-        <line num="34" count="3" type="stmt"/>
-        <line num="41" count="1" type="stmt"/>
-        <line num="42" count="1" type="stmt"/>
-        <line num="50" count="1" type="stmt"/>
-        <line num="51" count="2" type="stmt"/>
-        <line num="52" count="2" type="stmt"/>
-        <line num="53" count="2" type="stmt"/>
-        <line num="54" count="2" type="stmt"/>
       </file>
     </package>
   </project>

@@ -1,9 +1,9 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { ProfessionalRepository } from "../repositories/professional.repository";
-import { PaginationDto } from "src/common/dtos/pagination.dto";
+import { PaginationDto } from "src/common/dtos/request/pagination.dto";
 import { ProfessionalResponseDto } from "../dtos/response/professional-response.dto";
-import { PaginatedResponseDto } from "src/common/dtos/paginated-response.dto";
-import { CreateProfessionalDto } from "../dtos/create-professional.dto";
+import { PaginatedResponseDto } from "src/common/dtos/response/paginated-response.dto";
+import { CreateProfessionalDto } from "../dtos/request/create-professional.dto";
 import { LevelRepository } from "src/modules/levels/repositories/level.repository";
 
 

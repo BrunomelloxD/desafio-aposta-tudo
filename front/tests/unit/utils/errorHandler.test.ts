@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
-import { getErrorMessage, isConflictError, isNotFoundError } from '~/utils/errorHandler'
-import { ERROR_MESSAGES, HTTP_STATUS } from '~/utils/constants'
+import { getErrorMessage, isConflictError, isNotFoundError } from "~/src/shared/error/errorHandler";
+import { ERROR_MESSAGES, HTTP_STATUS } from "~/src/shared/utils/constants";
 
 describe('errorHandler', () => {
   describe('getErrorMessage', () => {

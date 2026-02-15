@@ -1,9 +1,9 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, Query } from "@nestjs/common";
 import { ProfessionalService } from "../services/professional.service";
 import { ProfessionalResponseDto } from "../dtos/response/professional-response.dto";
-import { PaginationDto } from "src/common/dtos/pagination.dto";
-import { PaginatedResponseDto } from "src/common/dtos/paginated-response.dto";
-import { CreateProfessionalDto } from "../dtos/create-professional.dto";
+import { PaginationDto } from "src/common/dtos/request/pagination.dto";
+import { PaginatedResponseDto } from "src/common/dtos/response/paginated-response.dto";
+import { CreateProfessionalDto } from "../dtos/request/create-professional.dto";
 import { ApiBadRequestResponse, ApiBody, ApiConflictResponse, ApiCreatedResponse, ApiNoContentResponse, ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiParam, ApiQuery, ApiTags } from "@nestjs/swagger";
 
 @ApiTags('Profissionais')

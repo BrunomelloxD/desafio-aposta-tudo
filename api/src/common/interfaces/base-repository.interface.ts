@@ -1,5 +1,5 @@
-import { PaginatedResponseDto } from '../dtos/paginated-response.dto';
-import { PaginationDto } from '../dtos/pagination.dto';
+import { PaginatedResponseDto } from '../dtos/response/paginated-response.dto';
+import { PaginationDto } from '../dtos/request/pagination.dto';
 
 export abstract class IBaseRepository<T, CreateDto = any, UpdateDto = any> {
     abstract findAll(paginationDto: PaginationDto): Promise<PaginatedResponseDto<T>>;

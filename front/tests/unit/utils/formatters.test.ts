@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { formatDate, formatDateToISO, getTodayISO, isFutureDate } from '~/utils/formatters'
+import { formatDate, formatDateToISO, getTodayISO, isFutureDate } from "~/src/shared/utils/formatters";
 
 describe('formatters', () => {
   describe('formatDate', () => {

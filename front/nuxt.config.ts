@@ -2,6 +2,7 @@
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
+  ssr: false,
   
   devServer: {
     port: 8080
@@ -13,9 +14,14 @@ export default defineNuxtConfig({
   ],
 
   dir: {
-    pages: 'pages',
-    layouts: 'layouts'
+    pages: 'src/ui/pages',
+    layouts: 'src/ui/layouts'
   },
+
+  components: [
+    { path: '~/src/ui/components', pathPrefix: false },
+    { path: '~/components', pathPrefix: false }
+  ],
 
   runtimeConfig: {
     public: {

@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest'
-import { usePagination } from '~/composables/usePagination'
+import { usePagination } from '~/src/shared/composables/usePagination'
 
 describe('usePagination', () => {
   let pagination: ReturnType<typeof usePagination>
