@@ -5,6 +5,7 @@ import { ProfessionalResponseDto } from "../dtos/response/professional-response.
 import { PaginatedResponseDto } from "src/common/dtos/response/paginated-response.dto";
 import { CreateProfessionalDto } from "../dtos/request/create-professional.dto";
 import { LevelRepository } from "src/modules/levels/repositories/level.repository";
+import { GetAllProfessionalDto } from "../dtos/request/get-all-professional.dto";
 
 
 @Injectable()
@@ -47,7 +48,7 @@ export class ProfessionalService {
         return this.professionalRepository.create(data);
     }
 
-    async findAll(queryParams: PaginationDto): Promise<PaginatedResponseDto<ProfessionalResponseDto>> {
+    async findAll(queryParams: GetAllProfessionalDto): Promise<PaginatedResponseDto<ProfessionalResponseDto>> {
         const professionals = await this.professionalRepository.findAll(queryParams);
 
         professionals.data = professionals.data.map(professional => ({

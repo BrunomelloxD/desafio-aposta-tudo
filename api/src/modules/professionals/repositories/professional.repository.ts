@@ -1,10 +1,12 @@
 import { Injectable } from "@nestjs/common";
+import { Prisma } from "@prisma/client";
 import { IProfessionalRepository } from "./professional.repository.interface";
 import { PrismaService } from "src/common/prisma/services/prisma.service";
 import { PaginationDto } from "src/common/dtos/request/pagination.dto";
 import { PaginatedResponseDto } from "src/common/dtos/response/paginated-response.dto";
 import { ProfessionalResponseDto } from "../dtos/response/professional-response.dto";
 import { CreateProfessionalDto } from "../dtos/request/create-professional.dto";
+import { GetAllProfessionalDto } from "../dtos/request/get-all-professional.dto";
 
 @Injectable()
 export class ProfessionalRepository implements IProfessionalRepository {
@@ -100,7 +102,11 @@ export class ProfessionalRepository implements IProfessionalRepository {
         })
     }
 
-    async findAll({ page = 1, limit = 10, search }: PaginationDto): Promise<PaginatedResponseDto<ProfessionalResponseDto>> {
+    async findAll({ page = 1, limit = 10, search, gender }: GetAllProfessionalDto): Promise<PaginatedResponseDto<ProfessionalResponseDto>> {
+        const where: Prisma.ProfessionalsWhereInput = {
+            ...(search && { nome: { contains: search, mode: Prisma.QueryMode.insensitive } }),
+            ...(gender && { sexo: gender }),
+        };
         const [professionals, total] = await this.prismaService.$transaction([
             this.prismaService.professionals.findMany({
                 skip: (page - 1) * limit,
@@ -113,11 +119,11 @@ export class ProfessionalRepository implements IProfessionalRepository {
                     nivel: true,
                 },
                 take: limit,
-                where: { nome: { contains: search, mode: 'insensitive' } },
+                where: where,
                 orderBy: { data_nascimento: 'desc' },
             }),
             this.prismaService.professionals.count({
-                where: { nome: { contains: search, mode: 'insensitive' } },
+                where: where,
             }),
         ]);
 

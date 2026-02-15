@@ -5,6 +5,8 @@ import { PaginationDto } from "src/common/dtos/request/pagination.dto";
 import { PaginatedResponseDto } from "src/common/dtos/response/paginated-response.dto";
 import { CreateProfessionalDto } from "../dtos/request/create-professional.dto";
 import { ApiBadRequestResponse, ApiBody, ApiConflictResponse, ApiCreatedResponse, ApiNoContentResponse, ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiParam, ApiQuery, ApiTags } from "@nestjs/swagger";
+import { GetAllProfessionalDto } from "../dtos/request/get-all-professional.dto";
+import { GenderEnum } from "src/common/enums/gender.enum";
 
 @ApiTags('Profissionais')
 @Controller('api/profissionais')
@@ -37,6 +39,13 @@ export class ProfessionalController {
         description: 'Buscar por nome do profissional',
         example: 'Lucas'
     })
+    @ApiQuery({
+        name: 'gender',
+        required: false,
+        enum: GenderEnum,
+        description: 'Filtrar por gênero do profissional',
+        example: GenderEnum.MALE
+    })
     @ApiOkResponse({
         description: 'Profissionais recuperados com sucesso',
         type: PaginatedResponseDto<ProfessionalResponseDto>
@@ -44,7 +53,7 @@ export class ProfessionalController {
     @ApiBadRequestResponse({
         description: 'Parâmetros de consulta inválidos'
     })
-    async findAll(@Query() queryParams: PaginationDto): Promise<PaginatedResponseDto<ProfessionalResponseDto>> {
+    async findAll(@Query() queryParams: GetAllProfessionalDto): Promise<PaginatedResponseDto<ProfessionalResponseDto>> {
         return this.professionalService.findAll(queryParams);
     }
 
