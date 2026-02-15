@@ -188,7 +188,7 @@ npm run test:coverage
    - 🗑️ Exclusão de registros
    - 🔍 Busca por nome
    - 📄 Paginação de resultados
-3. **Verifique a API** através do Swagger em http://localhost:3000/api#/
+3. **Verifique a API** através do Swagger em http://localhost:3000/swagger#/
 
 ### Testes Automatizados
 

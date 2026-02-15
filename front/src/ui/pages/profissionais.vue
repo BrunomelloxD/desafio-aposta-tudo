@@ -27,6 +27,18 @@
           @keyup.enter="performSearch"
         />
       </div>
+      <div class="w-40">
+        <select
+          v-model="selectedGender"
+          class="block w-full px-4 py-2 bg-dark-light border border-dark-lighter rounded-md shadow-sm text-white focus:ring-primary focus:border-primary transition-all duration-200"
+          @change="performSearch"
+        >
+          <option value="">Todos os sexos</option>
+          <option v-for="option in SEXO_OPTIONS" :key="option.value" :value="option.value">
+            {{ option.label }}
+          </option>
+        </select>
+      </div>
       <div class="w-18">
         <select
           v-model="limit"
@@ -59,7 +71,7 @@
     </div>
 
     <!-- Empty State -->
-    <div v-else-if="data && data.data.length === 0 && !activeSearch" class="text-center py-12">
+    <div v-else-if="data && data.data.length === 0 && !activeSearch && !activeGender" class="text-center py-12">
       <div class="bg-dark-light rounded-lg border border-dark-lighter p-8">
         <div class="text-6xl mb-4">👥</div>
         <h3 class="text-xl font-semibold text-white mb-2">Nenhum profissional cadastrado</h3>
@@ -74,7 +86,7 @@
     </div>
 
     <!-- No Results State -->
-    <div v-else-if="data && data.data.length === 0 && activeSearch" class="text-center py-12">
+    <div v-else-if="data && data.data.length === 0 && (activeSearch || activeGender)" class="text-center py-12">
       <div class="bg-dark-light rounded-lg border border-dark-lighter p-8">
         <div class="text-6xl mb-4">🔍</div>
         <h3 class="text-xl font-semibold text-white mb-2">Nenhum resultado encontrado</h3>
@@ -363,10 +375,12 @@ const currentPage = ref<number>(PAGINATION.DEFAULT_PAGE)
 const limit = ref<number>(PAGINATION.DEFAULT_LIMIT)
 const searchQuery = ref('')
 const activeSearch = ref('')
+const selectedGender = ref('')
+const activeGender = ref('')
 
 const { data, pending, error, refresh } = await useAsyncData(
   'profissionais',
-  () => fetchProfissionais(currentPage.value, limit.value, activeSearch.value),
+  () => fetchProfissionais(currentPage.value, limit.value, activeSearch.value, activeGender.value),
   {
     watch: [currentPage, limit]
   }
@@ -374,6 +388,7 @@ const { data, pending, error, refresh } = await useAsyncData(
 
 const performSearch = () => {
   activeSearch.value = searchQuery.value
+  activeGender.value = selectedGender.value
   currentPage.value = 1
   refresh()
 }
@@ -381,6 +396,8 @@ const performSearch = () => {
 const clearSearch = () => {
   searchQuery.value = ''
   activeSearch.value = ''
+  selectedGender.value = ''
+  activeGender.value = ''
   currentPage.value = 1
   refresh()
 }

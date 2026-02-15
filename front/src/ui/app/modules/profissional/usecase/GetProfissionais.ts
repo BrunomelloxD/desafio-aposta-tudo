@@ -8,8 +8,9 @@ export class GetProfissionaisUseCase {
   async execute(
     page: number,
     limit: number,
-    search?: string
+    search?: string,
+    gender?: string
   ): Promise<PaginatedResponse<Profissional>> {
-    return this.repository.findAll(page, limit, search)
+    return this.repository.findAll(page, limit, search, gender)
   }
 }

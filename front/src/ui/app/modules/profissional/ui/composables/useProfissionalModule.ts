@@ -21,9 +21,10 @@ export const useProfissionalModule = () => {
   const fetchProfissionais = async (
     page: number = PAGINATION.DEFAULT_PAGE,
     limit: number = PAGINATION.DEFAULT_LIMIT,
-    search: string = ''
+    search: string = '',
+    gender: string = ''
   ): Promise<PaginatedResponse<Profissional>> => {
-    return getProfissionaisUseCase.execute(page, limit, search)
+    return getProfissionaisUseCase.execute(page, limit, search, gender)
   }
 
   const createProfissional = async (data: CreateProfissionalInput): Promise<Profissional> => {

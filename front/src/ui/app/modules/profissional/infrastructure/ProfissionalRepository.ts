@@ -3,7 +3,7 @@ import type { PaginatedResponse } from '~/src/shared/http/types'
 import { HttpService } from '~/src/shared/http/HttpService'
 
 export interface IProfissionalRepository {
-  findAll(page: number, limit: number, search?: string): Promise<PaginatedResponse<Profissional>>
+  findAll(page: number, limit: number, search?: string, gender?: string): Promise<PaginatedResponse<Profissional>>
   create(data: CreateProfissionalInput): Promise<Profissional>
   update(id: string, data: UpdateProfissionalInput): Promise<Profissional>
   delete(id: string): Promise<void>
@@ -19,7 +19,8 @@ export class ProfissionalRepository implements IProfissionalRepository {
   async findAll(
     page: number,
     limit: number,
-    search: string = ''
+    search: string = '',
+    gender: string = ''
   ): Promise<PaginatedResponse<Profissional>> {
     const params: Record<string, string> = {
       page: page.toString(),
@@ -28,6 +29,10 @@ export class ProfissionalRepository implements IProfissionalRepository {
 
     if (search) {
       params.search = search
+    }
+
+    if (gender) {
+      params.gender = gender
     }
 
     return this.httpService.get<PaginatedResponse<Profissional>>('/api/profissionais', params)
