@@ -47,7 +47,7 @@ Após a execução, os serviços estarão disponíveis em:
 
 - **Frontend:** http://localhost:8080
 - **API:** http://localhost:3000
-- **Swagger (Documentação da API):** http://localhost:3000/api#/
+- **Swagger (Documentação da API):** http://localhost:3000/swagger-api#/
 - **Banco de Dados:** localhost:5432
 
 ### 4️⃣ Comandos úteis
