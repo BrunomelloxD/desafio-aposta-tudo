@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen bg-dark">
     <!-- Top Navigation Bar -->
-    <nav class="bg-primary border-b border-primary-dark">
+    <nav class="bg-primary border-b border-primary-dark rounded-b-2xl">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-16">
           <!-- Logo -->
