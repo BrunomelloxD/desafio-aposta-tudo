@@ -151,7 +151,7 @@
             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
               <button
                 @click="openEditModal(profissional)"
-                class="text-primary hover:text-primary-light mr-4 transition-colors duration-150"
+                class="text-white hover:text-primary-light mr-4 transition-colors duration-150"
               >
                 Editar
               </button>
