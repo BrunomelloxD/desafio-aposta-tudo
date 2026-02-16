@@ -1,25 +1,25 @@
 <template>
-  <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+  <div class="bg-dark-light shadow-lg overflow-hidden rounded-xl border border-surface-border">
     <div v-if="loading" class="text-center py-12">
-      <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-      <p class="mt-4 text-gray-600">Carregando...</p>
+      <div class="inline-block animate-spin rounded-full h-10 w-10 border-2 border-primary border-t-transparent" />
+      <p class="mt-4 text-text-muted">Carregando...</p>
     </div>
 
-    <div v-else-if="error" class="bg-red-50 border border-red-200 rounded-md p-4 m-4">
-      <p class="text-red-800">{{ error }}</p>
+    <div v-else-if="error" class="bg-red-900/20 border border-red-500/30 rounded-lg p-4 m-4">
+      <p class="text-red-400">{{ error }}</p>
     </div>
 
     <template v-else>
       <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-gray-200">
-          <thead class="bg-gray-50">
+        <table class="min-w-full divide-y divide-surface-border">
+          <thead>
             <tr>
               <th
                 v-for="column in columns"
                 :key="column.key"
                 scope="col"
                 :class="[
-                  'px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider',
+                  'px-6 py-3 text-xs font-semibold text-text-muted uppercase tracking-wider',
                   column.align === 'right' ? 'text-right' : 'text-left'
                 ]"
               >
@@ -27,17 +27,16 @@
               </th>
             </tr>
           </thead>
-          <tbody class="bg-white divide-y divide-gray-200">
+          <tbody class="divide-y divide-surface-border">
             <slot name="body" />
             <tr v-if="!hasData">
-              <td :colspan="columns.length" class="px-6 py-8 text-center text-sm text-gray-500">
+              <td :colspan="columns.length" class="px-6 py-8 text-center text-sm text-text-muted">
                 Nenhum registro encontrado
               </td>
             </tr>
           </tbody>
         </table>
       </div>
-
       <slot name="pagination" />
     </template>
   </div>

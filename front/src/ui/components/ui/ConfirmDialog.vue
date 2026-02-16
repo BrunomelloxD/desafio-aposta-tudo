@@ -9,11 +9,11 @@
           <component :is="icon" class="h-6 w-6" :class="variantClasses.text" aria-hidden="true" />
         </div>
         <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-          <h3 class="text-lg leading-6 font-medium text-white" id="modal-title">
+          <h3 class="text-lg leading-6 font-medium text-text" id="modal-title">
             {{ title }}
           </h3>
           <div class="mt-2">
-            <p class="text-sm text-gray-400">
+            <p class="text-sm text-text-muted">
               {{ message }}
             </p>
           </div>
@@ -25,7 +25,7 @@
         type="button"
         @click="confirm"
         :disabled="loading"
-        class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50 transition-all duration-200"
+        class="w-full inline-flex justify-center rounded-lg border border-transparent shadow-sm px-4 py-2 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50 transition-all duration-200"
         :class="[variantClasses.button, loading && 'cursor-not-allowed']"
       >
         {{ loading ? loadingText : confirmText }}
@@ -34,7 +34,7 @@
         type="button"
         @click="cancel"
         :disabled="loading"
-        class="mt-3 w-full inline-flex justify-center rounded-md border border-dark-lighter shadow-sm px-4 py-2 bg-dark text-base font-medium text-gray-300 hover:bg-dark-lighter focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50 transition-all duration-200"
+        class="mt-3 w-full inline-flex justify-center rounded-lg border border-surface-border shadow-sm px-4 py-2 bg-dark text-base font-medium text-text-muted hover:bg-dark-lighter focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50 transition-all duration-200"
       >
         {{ cancelText }}
       </button>

@@ -9,7 +9,6 @@
 
 <template>
   <div class="p-8 space-y-8 bg-dark">
-    <!-- Typography Showcase -->
     <section class="space-y-6">
       <h1 class="text-4xl font-extrabold text-white">
         Typography System
@@ -19,7 +18,6 @@
       </p>
     </section>
 
-    <!-- Headings -->
     <section class="space-y-4">
       <h2 class="text-2xl font-bold text-white mb-4">Headings</h2>
       
@@ -39,7 +37,6 @@
       </div>
     </section>
 
-    <!-- Body Text -->
     <section class="space-y-4">
       <h2 class="text-2xl font-bold text-white mb-4">Body Text</h2>
       
@@ -56,7 +53,6 @@
       </div>
     </section>
 
-    <!-- Buttons & CTAs -->
     <section class="space-y-4">
       <h2 class="text-2xl font-bold text-white mb-4">Buttons & CTAs</h2>
       
@@ -73,7 +69,6 @@
       </div>
     </section>
 
-    <!-- Tables & Lists -->
     <section class="space-y-4">
       <h2 class="text-2xl font-bold text-white mb-4">Tables & Data</h2>
       
@@ -103,7 +98,6 @@
       </div>
     </section>
 
-    <!-- Forms -->
     <section class="space-y-4">
       <h2 class="text-2xl font-bold text-white mb-4">Forms</h2>
       
@@ -124,7 +118,6 @@
       </div>
     </section>
 
-    <!-- Numbers & Stats -->
     <section class="space-y-4">
       <h2 class="text-2xl font-bold text-white mb-4">Numbers & Statistics</h2>
       
@@ -148,7 +141,6 @@
       </div>
     </section>
 
-    <!-- Usage Guide -->
     <section class="space-y-4">
       <h2 class="text-2xl font-bold text-white mb-4">Usage Guide</h2>
       

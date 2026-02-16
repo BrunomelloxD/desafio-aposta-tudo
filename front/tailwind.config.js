@@ -5,51 +5,44 @@ export default {
     "./layouts/**/*.vue",
     "./pages/**/*.vue",
     "./plugins/**/*.{js,ts}",
+    "./src/**/*.{js,vue,ts}",
     "./app.vue",
   ],
   theme: {
     extend: {
-      /**
-       * Font Family Configuration
-       * 
-       * Plus Jakarta Sans - Fonte principal do APOSTATUDO
-       * Fallback stack garante boa experiência em todos os dispositivos
-       * 
-       * Hierarquia de fallback:
-       * 1. Plus Jakarta Sans (Google Fonts)
-       * 2. system-ui (Fonte do SO)
-       * 3. -apple-system (macOS/iOS)
-       * 4. BlinkMacSystemFont (Apple fallback)
-       * 5. Segoe UI (Windows)
-       * 6. Roboto (Android)
-       * 7. sans-serif (Generic fallback)
-       */
       fontFamily: {
         sans: ['Plus Jakarta Sans', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
       },
-      /**
-       * Color Palette - APOSTATUDO Brand
-       * 
-       * Primary: Azul (#0606ad) - Navegação, ações principais
-       * Accent: Laranja (#ff450c) - CTAs, destaques
-       * Dark: Background escuro (#020716) - Tema principal
-       */
       colors: {
         'primary': {
-          DEFAULT: '#0606ad',
-          dark: '#050590',
-          light: '#0808c9',
+          DEFAULT: '#f97015',
+          dark: '#e06010',
+          light: '#fb8c3c',
         },
         'accent': {
-          DEFAULT: '#ff450c',
-          dark: '#e63d0a',
-          light: '#ff5a24',
+          DEFAULT: '#f97015',
+          dark: '#e06010',
+          light: '#fb8c3c',
         },
         'dark': {
-          DEFAULT: '#020716',
-          light: '#0a0f2c',
-          lighter: '#131a3f',
-        }
+          DEFAULT: '#111317',
+          light: '#1a1d23',
+          lighter: '#24272e',
+        },
+        'surface': {
+          DEFAULT: '#1a1d23',
+          light: '#24272e',
+          border: '#2a2d35',
+        },
+        'text': {
+          DEFAULT: '#f0f2f5',
+          muted: '#9ca3af',
+          dim: '#6b7280',
+        },
+        'warm': {
+          DEFAULT: '#2f221f',
+          light: '#3d2e2a',
+        },
       }
     },
   },

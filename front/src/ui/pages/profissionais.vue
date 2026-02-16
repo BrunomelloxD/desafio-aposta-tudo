@@ -1,346 +1,100 @@
 <template>
   <div class="px-4 sm:px-6 lg:px-8">
-    <!-- Header -->
-    <div class="sm:flex sm:items-center sm:justify-between mb-8">
-      <div>
-        <h1 class="text-3xl font-bold text-white">Profissionais</h1>
-        <p class="mt-2 text-sm text-gray-400">Gerencie os profissionais cadastrados</p>
-      </div>
-      <div class="mt-4 sm:mt-0">
-        <button
-          @click="openCreateModal"
-          class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-accent hover:bg-accent-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent transition-all duration-200"
-        >
-          Novo Profissional
-        </button>
-      </div>
-    </div>
+    <PageHeader title="Profissionais" subtitle="Gerencie os profissionais cadastrados no sistema">
+      <template #actions>
+        <PrimaryButton label="Novo Profissional" :icon="PlusIcon" @click="openCreateModal" />
+      </template>
+    </PageHeader>
 
-    <!-- Search and Filters -->
-    <div class="mb-6 flex gap-4">
-      <div class="flex-1">
-        <input
-          v-model="searchQuery"
-          type="text"
-          placeholder="Buscar por nome..."
-          class="block w-full px-4 py-2 bg-dark-light border border-dark-lighter rounded-md shadow-sm text-white placeholder-gray-500 focus:ring-primary focus:border-primary transition-all duration-200"
-          @keyup.enter="performSearch"
-        />
-      </div>
-      <div class="w-40">
-        <select
-          v-model="selectedGender"
-          class="block w-full px-4 py-2 bg-dark-light border border-dark-lighter rounded-md shadow-sm text-white focus:ring-primary focus:border-primary transition-all duration-200"
-          @change="performSearch"
-        >
-          <option value="">Todos os sexos</option>
-          <option v-for="option in SEXO_OPTIONS" :key="option.value" :value="option.value">
-            {{ option.label }}
-          </option>
-        </select>
-      </div>
-      <div class="w-18">
-        <select
-          v-model="limit"
-          class="block w-full px-4 py-2 bg-dark-light border border-dark-lighter rounded-md shadow-sm text-white focus:ring-primary focus:border-primary transition-all duration-200"
-        >
-          <option v-for="option in PAGINATION.LIMIT_OPTIONS" :key="option" :value="option">
-            {{ option }}
-          </option>
-        </select>
-      </div>
-      <div>
-        <button
-          @click="performSearch"
-          class="px-6 py-2 bg-primary text-white rounded-md hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all duration-200 font-medium"
-        >
-          Buscar
-        </button>
-      </div>
-    </div>
+    <StatsGrid :cards="statsCards" />
 
-    <!-- Loading State -->
+    <SearchBar
+      v-model="searchQuery"
+      :limit="limit"
+      :limit-options="PAGINATION.LIMIT_OPTIONS as unknown as number[]"
+      @update:limit="limit = $event"
+      @search="performSearch(refresh)"
+    >
+      <template #filters>
+        <div class="w-44">
+          <select
+            v-model="selectedGender"
+            class="block w-full pl-3 pr-8 py-2.5 bg-dark-light border border-surface-border rounded-lg text-text focus:ring-1 focus:ring-primary focus:border-primary transition-all duration-200 appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2020%2020%22%20fill%3D%22%239ca3af%22%3E%3Cpath%20fill-rule%3D%22evenodd%22%20d%3D%22M5.23%207.21a.75.75%200%20011.06.02L10%2011.168l3.71-3.938a.75.75%200%20111.08%201.04l-4.25%204.5a.75.75%200%2001-1.08%200l-4.25-4.5a.75.75%200%2001.02-1.06z%22%20clip-rule%3D%22evenodd%22%2F%3E%3C%2Fsvg%3E')] bg-[length:1.25rem] bg-[right_0.5rem_center] bg-no-repeat"
+            @change="performSearch(refresh)"
+          >
+            <option value="">Todos os sexos</option>
+            <option v-for="option in SEXO_OPTIONS" :key="option.value" :value="option.value">
+              {{ option.label }}
+            </option>
+          </select>
+        </div>
+      </template>
+    </SearchBar>
+
     <div v-if="pending" class="text-center py-12">
-      <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-      <p class="mt-4 text-gray-400">Carregando...</p>
+      <div class="inline-block animate-spin rounded-full h-10 w-10 border-2 border-primary border-t-transparent" />
+      <p class="mt-4 text-text-muted">Carregando...</p>
     </div>
 
-    <!-- Error State -->
-    <div v-else-if="error" class="bg-red-900/30 border border-red-500/50 rounded-md p-4">
-      <p class="text-red-300">Erro ao carregar profissionais: {{ error.message }}</p>
+    <div v-else-if="error" class="bg-red-900/20 border border-red-500/30 rounded-xl p-4">
+      <p class="text-red-400">Erro ao carregar profissionais: {{ error.message }}</p>
     </div>
 
-    <!-- Empty State -->
-    <div v-else-if="data && data.data.length === 0 && !activeSearch && !activeGender" class="text-center py-12">
-      <div class="bg-dark-light rounded-lg border border-dark-lighter p-8">
-        <div class="text-6xl mb-4">👥</div>
-        <h3 class="text-xl font-semibold text-white mb-2">Nenhum profissional cadastrado</h3>
-        <p class="text-gray-400 mb-6">Não há dados cadastrados no momento, por favor, inicie um cadastro</p>
-        <button
-          @click="openCreateModal"
-          class="inline-flex items-center px-6 py-3 bg-accent text-white rounded-md hover:bg-accent-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent transition-all duration-200 font-medium"
-        >
-          Criar Primeiro Profissional
-        </button>
-      </div>
-    </div>
+    <EmptyState
+      v-else-if="data && data.data.length === 0 && !activeSearch && !activeGender"
+      emoji="👥"
+      title="Nenhum profissional cadastrado"
+      message="Não há dados cadastrados no momento, por favor, inicie um cadastro"
+    >
+      <template #action>
+        <PrimaryButton label="Criar Primeiro Profissional" :icon="PlusIcon" @click="openCreateModal" />
+      </template>
+    </EmptyState>
 
-    <!-- No Results State -->
-    <div v-else-if="data && data.data.length === 0 && (activeSearch || activeGender)" class="text-center py-12">
-      <div class="bg-dark-light rounded-lg border border-dark-lighter p-8">
-        <div class="text-6xl mb-4">🔍</div>
-        <h3 class="text-xl font-semibold text-white mb-2">Nenhum resultado encontrado</h3>
-        <p class="text-gray-400 mb-6">Tente ajustar sua pesquisa ou limpe os filtros</p>
-        <button
-          @click="clearSearch"
-          class="inline-flex items-center px-6 py-3 bg-primary text-white rounded-md hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all duration-200 font-medium"
-        >
-          Limpar Pesquisa
-        </button>
-      </div>
-    </div>
+    <EmptyState
+      v-else-if="data && data.data.length === 0 && (activeSearch || activeGender)"
+      emoji="🔍"
+      title="Nenhum resultado encontrado"
+      message="Tente ajustar sua pesquisa ou limpe os filtros"
+    >
+      <template #action>
+        <PrimaryButton label="Limpar Pesquisa" @click="clearSearch(refresh)" />
+      </template>
+    </EmptyState>
 
-    <!-- Table -->
-    <div v-else-if="data" class="bg-dark-light shadow-lg overflow-hidden rounded-lg border border-dark-lighter">
-      <table class="min-w-full divide-y divide-dark-lighter">
-        <thead class="bg-dark-lighter">
-          <tr>
-            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-              Nome
-            </th>
-            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-              Nível
-            </th>
-            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-              Sexo
-            </th>
-            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-              Data Nascimento
-            </th>
-            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-              Idade
-            </th>
-            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-              Hobby
-            </th>
-            <th scope="col" class="relative px-6 py-3">
-              <span class="sr-only">Ações</span>
-            </th>
-          </tr>
-        </thead>
-        <tbody class="bg-dark-light divide-y divide-dark-lighter">
-          <tr v-for="profissional in data.data" :key="profissional.id" class="hover:bg-dark-lighter transition-colors duration-150">
-            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">
-              {{ profissional.nome }}
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
-              {{ profissional.nivel || '-' }}
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
-              {{ profissional.sexo }}
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
-              {{ formatDate(profissional.data_nascimento) }}
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
-              {{ profissional.idade }} anos
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
-              {{ profissional.hobby }}
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-              <button
-                @click="openEditModal(profissional)"
-                class="text-white hover:text-primary-light mr-4 transition-colors duration-150"
-              >
-                Editar
-              </button>
-              <button
-                @click="confirmDelete(profissional)"
-                class="text-accent hover:text-accent-light transition-colors duration-150"
-              >
-                Excluir
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <template v-else-if="data">
+      <ProfissionalTable
+        :profissionais="data.data"
+        :all-niveis="nivelNames"
+        @edit="openEditModal"
+        @delete="confirmDelete"
+      >
+        <template #pagination>
+          <DataPagination
+            :current-page="currentPage"
+            :last-page="data.meta.last_page"
+            :total="data.meta.total"
+            :limit="limit"
+            :visible-pages="visiblePages"
+            @prev="prevPage(data.meta.last_page)"
+            @next="nextPage(data.meta.last_page)"
+            @go-to-page="goToPage"
+          />
+        </template>
+      </ProfissionalTable>
+    </template>
 
-      <!-- Pagination -->
-      <div class="bg-dark-light px-4 py-3 flex items-center justify-between border-t border-dark-lighter sm:px-6">
-        <div class="flex-1 flex justify-between sm:hidden">
-          <button
-            @click="prevPage"
-            :disabled="currentPage === 1"
-            class="relative inline-flex items-center px-4 py-2 border border-dark-lighter text-sm font-medium rounded-md text-gray-300 bg-dark-lighter hover:bg-dark disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
-          >
-            Anterior
-          </button>
-          <button
-            @click="nextPage"
-            :disabled="currentPage >= data.meta.last_page"
-            class="ml-3 relative inline-flex items-center px-4 py-2 border border-dark-lighter text-sm font-medium rounded-md text-gray-300 bg-dark-lighter hover:bg-dark disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
-          >
-            Próxima
-          </button>
-        </div>
-        <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-          <div>
-            <p class="text-sm text-gray-400">
-              Mostrando
-              <span class="font-medium text-white">{{ (data.meta.page - 1) * limit + 1 }}</span>
-              até
-              <span class="font-medium text-white">{{ Math.min(data.meta.page * limit, data.meta.total) }}</span>
-              de
-              <span class="font-medium text-white">{{ data.meta.total }}</span>
-              resultados
-            </p>
-          </div>
-          <div>
-            <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
-              <button
-                @click="prevPage"
-                :disabled="currentPage === 1"
-                class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-dark-lighter bg-dark-lighter text-sm font-medium text-gray-300 hover:bg-dark disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
-              >
-                <span class="sr-only">Anterior</span>
-                ←
-              </button>
-              <button
-                v-for="page in visiblePages"
-                :key="page"
-                @click="goToPage(page)"
-                :class="[
-                  'relative inline-flex items-center px-4 py-2 border text-sm font-medium transition-all duration-200',
-                  page === currentPage
-                    ? 'z-10 bg-primary border-primary text-white'
-                    : 'bg-dark-lighter border-dark-lighter text-gray-300 hover:bg-dark'
-                ]"
-              >
-                {{ page }}
-              </button>
-              <button
-                @click="nextPage"
-                :disabled="currentPage >= data.meta.last_page"
-                class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-dark-lighter bg-dark-lighter text-sm font-medium text-gray-300 hover:bg-dark disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
-              >
-                <span class="sr-only">Próxima</span>
-                →
-              </button>
-            </nav>
-          </div>
-        </div>
-      </div>
-    </div>
+    <ProfissionalForm
+      v-model="showModal"
+      :form-data="formData"
+      :niveis="niveis"
+      :is-editing="!!editingProfissional"
+      :loading="isSubmitting"
+      :max-date="maxDate"
+      @submit="handleSubmit(refresh)"
+      @cancel="closeModal"
+    />
 
-    <!-- Form Modal -->
-    <Modal v-model="showModal" size="lg">
-      <form @submit.prevent="handleSubmit">
-        <div class="bg-dark-light px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-          <h3 class="text-lg leading-6 font-medium text-white mb-4">
-            {{ editingProfissional ? 'Editar Profissional' : 'Novo Profissional' }}
-          </h3>
-          
-          <div class="space-y-4">
-            <div>
-              <label for="nome" class="block text-sm font-medium text-gray-300 mb-2">
-                Nome *
-              </label>
-              <input
-                v-model="formData.nome"
-                type="text"
-                id="nome"
-                required
-                class="block w-full px-3 py-2 bg-dark border border-dark-lighter rounded-md shadow-sm text-white placeholder-gray-500 focus:ring-primary focus:border-primary transition-all duration-200"
-                placeholder="Digite o nome"
-              />
-            </div>
-
-            <div>
-              <label for="nivel_id" class="block text-sm font-medium text-gray-300 mb-2">
-                Nível *
-              </label>
-              <select
-                v-model="formData.nivel_id"
-                id="nivel_id"
-                required
-                class="block w-full px-3 py-2 bg-dark border border-dark-lighter rounded-md shadow-sm text-white focus:ring-primary focus:border-primary transition-all duration-200"
-              >
-                <option value="">Selecione um nível</option>
-                <option v-for="nivel in niveis" :key="nivel.id" :value="nivel.id">
-                  {{ nivel.nivel }}
-                </option>
-              </select>
-            </div>
-
-            <div>
-              <label for="sexo" class="block text-sm font-medium text-gray-300 mb-2">
-                Sexo *
-              </label>
-              <select
-                v-model="formData.sexo"
-                id="sexo"
-                required
-                class="block w-full px-3 py-2 bg-dark border border-dark-lighter rounded-md shadow-sm text-white focus:ring-primary focus:border-primary transition-all duration-200"
-              >
-                <option value="">Selecione</option>
-                <option v-for="option in SEXO_OPTIONS" :key="option.value" :value="option.value">
-                  {{ option.label }}
-                </option>
-              </select>
-            </div>
-
-            <div>
-              <label for="data_nascimento" class="block text-sm font-medium text-gray-300 mb-2">
-                Data de Nascimento *
-              </label>
-              <input
-                v-model="formData.data_nascimento"
-                type="date"
-                id="data_nascimento"
-                required
-                :max="maxDate"
-                class="block w-full px-3 py-2 bg-dark border border-dark-lighter rounded-md shadow-sm text-white focus:ring-primary focus:border-primary transition-all duration-200 [color-scheme:dark]"
-              />
-              <p class="mt-1 text-xs text-gray-500">A data deve ser anterior a hoje</p>
-            </div>
-
-            <div>
-              <label for="hobby" class="block text-sm font-medium text-gray-300 mb-2">
-                Hobby *
-              </label>
-              <input
-                v-model="formData.hobby"
-                type="text"
-                id="hobby"
-                required
-                class="block w-full px-3 py-2 bg-dark border border-dark-lighter rounded-md shadow-sm text-white placeholder-gray-500 focus:ring-primary focus:border-primary transition-all duration-200"
-                placeholder="Digite o hobby"
-              />
-            </div>
-          </div>
-        </div>
-        <div class="bg-dark-lighter px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-          <button
-            type="submit"
-            :disabled="isSubmitting"
-            class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-primary text-base font-medium text-white hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50 transition-all duration-200"
-          >
-            {{ isSubmitting ? 'Salvando...' : 'Salvar' }}
-          </button>
-          <button
-            type="button"
-            @click="closeModal"
-            :disabled="isSubmitting"
-            class="mt-3 w-full inline-flex justify-center rounded-md border border-dark-lighter shadow-sm px-4 py-2 bg-dark text-base font-medium text-gray-300 hover:bg-dark-lighter focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50 transition-all duration-200"
-          >
-            Cancelar
-          </button>
-        </div>
-      </form>
-    </Modal>
-
-    <!-- Confirm Delete Dialog -->
     <ConfirmDialog
       v-model="showDeleteDialog"
       title="Excluir Profissional"
@@ -350,227 +104,99 @@
       variant="danger"
       :loading="isDeleting"
       loading-text="Excluindo..."
-      @confirm="handleDelete"
+      @confirm="handleDelete(refresh)"
       @cancel="cancelDelete"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-import type { Profissional } from '~/src/ui/app/modules/profissional/domain/Profissional.types'
-import type { Nivel } from '~/src/ui/app/modules/nivel/domain/Nivel.types'
-import type { Sexo } from '~/src/shared/utils/constants'
-import { formatDate, isFutureDate, getTodayISO } from '~/src/shared/utils/formatters'
-import { PAGINATION, SEXO_OPTIONS } from '~/src/shared/utils/constants'
-import { getErrorMessage } from '~/src/shared/error/errorHandler'
-import { useProfissionalModule } from '~/src/ui/app/modules/profissional/ui/composables/useProfissionalModule'
-import { useNivelModule } from '~/src/ui/app/modules/nivel/ui/composables/useNivelModule'
-import { useNotification } from '~/src/shared/composables/useNotification'
+import { PlusIcon, UsersIcon } from '@heroicons/vue/24/outline'
+import { PAGINATION, SEXO_OPTIONS, getNivelCardColor } from '~/src/shared/utils/constants'
+import { useProfissionaisPage } from '~/src/ui/app/modules/profissional/ui/composables/useProfissionaisPage'
+import type { StatCardData } from '~/src/ui/components/common/StatsGrid.vue'
 
-const { fetchProfissionais, createProfissional, updateProfissional, deleteProfissional } = useProfissionalModule()
-const { fetchNiveis } = useNivelModule()
-const { success, error: notifyError } = useNotification()
-
-const currentPage = ref<number>(PAGINATION.DEFAULT_PAGE)
-const limit = ref<number>(PAGINATION.DEFAULT_LIMIT)
-const searchQuery = ref('')
-const activeSearch = ref('')
-const selectedGender = ref('')
-const activeGender = ref('')
+const {
+  fetchProfissionais,
+  loadNiveis,
+  niveis,
+  currentPage,
+  limit,
+  nextPage,
+  prevPage,
+  goToPage,
+  getVisiblePages,
+  searchQuery,
+  activeSearch,
+  selectedGender,
+  activeGender,
+  performSearch,
+  clearSearch,
+  showModal,
+  editingProfissional,
+  formData,
+  isSubmitting,
+  maxDate,
+  openCreateModal,
+  openEditModal,
+  closeModal,
+  handleSubmit,
+  showDeleteDialog,
+  profissionalToDelete,
+  isDeleting,
+  confirmDelete,
+  cancelDelete,
+  handleDelete,
+} = useProfissionaisPage()
 
 const { data, pending, error, refresh } = await useAsyncData(
   'profissionais',
   () => fetchProfissionais(currentPage.value, limit.value, activeSearch.value, activeGender.value),
-  {
-    watch: [currentPage, limit]
-  }
+  { watch: [currentPage, limit] }
 )
 
-const performSearch = () => {
-  activeSearch.value = searchQuery.value
-  activeGender.value = selectedGender.value
-  currentPage.value = 1
-  refresh()
-}
-
-const clearSearch = () => {
-  searchQuery.value = ''
-  activeSearch.value = ''
-  selectedGender.value = ''
-  activeGender.value = ''
-  currentPage.value = 1
-  refresh()
-}
-
-const niveis = ref<Nivel[]>([])
-const loadNiveis = async () => {
-  try {
-    const response = await fetchNiveis(1, 100, '')
-    niveis.value = response.data
-  } catch (err) {
-    notifyError('Erro ao carregar níveis')
-    console.error('Erro ao carregar níveis:', err)
-  }
-}
 await loadNiveis()
-
-const showModal = ref(false)
-const editingProfissional = ref<Profissional | null>(null)
-const formData = ref({
-  nome: '',
-  nivel_id: '',
-  sexo: '' as Sexo | '',
-  data_nascimento: '',
-  hobby: ''
-})
-const isSubmitting = ref(false)
-
-const showDeleteDialog = ref(false)
-const profissionalToDelete = ref<Profissional | null>(null)
-const isDeleting = ref(false)
-
-const maxDate = computed(() => getTodayISO())
 
 const visiblePages = computed(() => {
   if (!data.value) return []
-  const total = data.value.meta.last_page
-  const current = currentPage.value
-  const pages: number[] = []
-  
-  if (total <= 7) {
-    for (let i = 1; i <= total; i++) {
-      pages.push(i)
-    }
-  } else {
-    if (current <= 4) {
-      for (let i = 1; i <= 5; i++) pages.push(i)
-      pages.push(total)
-    } else if (current >= total - 3) {
-      pages.push(1)
-      for (let i = total - 4; i <= total; i++) pages.push(i)
-    } else {
-      pages.push(1)
-      for (let i = current - 1; i <= current + 1; i++) pages.push(i)
-      pages.push(total)
-    }
-  }
-  
-  return pages
+  return getVisiblePages(data.value.meta.last_page)
 })
 
-const openCreateModal = () => {
-  editingProfissional.value = null
-  formData.value = {
-    nome: '',
-    nivel_id: '',
-    sexo: '',
-    data_nascimento: '',
-    hobby: ''
-  }
-  showModal.value = true
-}
+const nivelNames = computed(() => niveis.value.map(n => n.nivel))
 
-const openEditModal = (profissional: Profissional) => {
-  editingProfissional.value = profissional
-  formData.value = {
-    nome: profissional.nome,
-    nivel_id: profissional.nivel_id || '',
-    sexo: profissional.sexo,
-    data_nascimento: profissional.data_nascimento?.split('T')[0] ?? '',
-    hobby: profissional.hobby
-  }
-  showModal.value = true
-}
+const statsCards = computed<StatCardData[]>(() => {
+  const total = data.value?.meta.total ?? 0
+  const professionals = data.value?.data ?? []
 
-const closeModal = () => {
-  showModal.value = false
-  editingProfissional.value = null
-  formData.value = {
-    nome: '',
-    nivel_id: '',
-    sexo: '',
-    data_nascimento: '',
-    hobby: ''
-  }
-}
-
-const handleSubmit = async () => {
-  if (!formData.value.sexo) {
-    notifyError('Por favor, selecione o sexo')
-    return
+  const totalCard: StatCardData = {
+    label: 'Total de Profissionais',
+    value: total,
+    icon: UsersIcon,
+    iconColor: 'bg-primary/20 text-primary',
   }
 
-  if (isFutureDate(formData.value.data_nascimento)) {
-    notifyError('A data de nascimento deve ser anterior a hoje')
-    return
-  }
-
-  isSubmitting.value = true
-  try {
-    const data = {
-      nome: formData.value.nome,
-      nivel_id: formData.value.nivel_id,
-      sexo: formData.value.sexo as Sexo,
-      data_nascimento: formData.value.data_nascimento,
-      hobby: formData.value.hobby
+  // Count by nivel from the visible professionals
+  const nivelCountMap = new Map<string, number>()
+  for (const p of professionals) {
+    if (p.nivel) {
+      nivelCountMap.set(p.nivel, (nivelCountMap.get(p.nivel) ?? 0) + 1)
     }
+  }
 
-    if (editingProfissional.value) {
-      await updateProfissional(editingProfissional.value.id, data)
-      success('Profissional atualizado com sucesso!')
-    } else {
-      await createProfissional(data)
-      success('Profissional cadastrado com sucesso!')
+  // Build a card for each registered nivel
+  const allNames = nivelNames.value
+  const nivelCards: StatCardData[] = allNames.map((nivel) => {
+    const count = nivelCountMap.get(nivel) ?? 0
+    const subtitle = total > 0 ? `${Math.round((count / total) * 100)}% do total` : '0%'
+    return {
+      label: `Nível ${nivel}`,
+      value: count,
+      subtitle,
+      icon: UsersIcon,
+      iconColor: getNivelCardColor(nivel, allNames),
     }
-    await refresh()
-    closeModal()
-  } catch (err: unknown) {
-    notifyError(getErrorMessage(err))
-  } finally {
-    isSubmitting.value = false
-  }
-}
+  })
 
-const confirmDelete = (profissional: Profissional) => {
-  profissionalToDelete.value = profissional
-  showDeleteDialog.value = true
-}
-
-const cancelDelete = () => {
-  profissionalToDelete.value = null
-  showDeleteDialog.value = false
-}
-
-const handleDelete = async () => {
-  if (!profissionalToDelete.value) return
-  
-  isDeleting.value = true
-  try {
-    await deleteProfissional(profissionalToDelete.value.id)
-    success('Profissional excluído com sucesso!')
-    await refresh()
-    showDeleteDialog.value = false
-    profissionalToDelete.value = null
-  } catch (err: unknown) {
-    notifyError(getErrorMessage(err))
-  } finally {
-    isDeleting.value = false
-  }
-}
-
-const nextPage = () => {
-  if (data.value && currentPage.value < data.value.meta.last_page) {
-    currentPage.value++
-  }
-}
-
-const prevPage = () => {
-  if (currentPage.value > 1) {
-    currentPage.value--
-  }
-}
-
-const goToPage = (page: number) => {
-  currentPage.value = page
-}
+  return [totalCard, ...nivelCards]
+})
 </script>

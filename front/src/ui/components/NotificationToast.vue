@@ -5,7 +5,7 @@
         <div
           v-for="notification in notifications"
           :key="notification.id"
-          class="pointer-events-auto w-full bg-dark-light shadow-lg rounded-lg ring-1 ring-dark-lighter border border-dark-lighter overflow-hidden"
+          class="pointer-events-auto w-full bg-dark-light shadow-lg rounded-xl ring-1 ring-surface-border border border-surface-border overflow-hidden"
         >
           <div class="p-4">
             <div class="flex items-start">
@@ -13,14 +13,14 @@
                 <component :is="getIcon(notification.type)" :class="getIconClass(notification.type)" class="h-6 w-6" />
               </div>
               <div class="ml-3 w-0 flex-1 pt-0.5">
-                <p class="text-sm font-medium text-white">
+                <p class="text-sm font-medium text-text">
                   {{ notification.message }}
                 </p>
               </div>
               <div class="ml-4 flex-shrink-0 flex">
                 <button
                   @click="remove(notification.id)"
-                  class="bg-dark-light rounded-md inline-flex text-gray-400 hover:text-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors duration-150"
+                  class="bg-dark-light rounded-md inline-flex text-text-dim hover:text-text-muted focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors duration-150"
                 >
                   <span class="sr-only">Fechar</span>
                   <XMarkIcon class="h-5 w-5" />

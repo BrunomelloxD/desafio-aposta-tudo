@@ -25,7 +25,7 @@
             <Transition name="modal-content">
               <div
                 v-if="modelValue"
-                class="relative inline-block align-bottom bg-dark-light rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full border border-dark-lighter z-[9999]"
+                class="relative inline-block align-bottom bg-dark-light rounded-xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full border border-surface-border z-[9999]"
                 :class="sizeClasses"
               >
                 <slot />
